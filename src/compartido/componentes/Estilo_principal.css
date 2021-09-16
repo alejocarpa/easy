@@ -1,0 +1,22 @@
+.container-completo{
+    background: -webkit-linear-gradient(90deg, #7e7281ea 2%, #4047acfa 98%);
+}
+
+.detalle-exporta{
+    padding-left: 10px;
+    display: flex;
+    background: #212529;
+}
+
+.detalle-exporta-icono{
+    padding-left: 5px;
+    padding-right: 5px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 2rem;
+}
+
+.encabezado-detalle{
+    position: sticky;
+    top: 0;
+}

@@ -1,0 +1,251 @@
+.example {
+  background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(28, 27, 27) 100%);
+  height: 80px;
+  text-align:center;
+}
+
+.navbar-logo {
+  color: #fff;
+  float: left;
+  margin-left: 1em;
+  margin-top: 0.5em;
+  text-decoration: none;
+  font-size: 2rem;
+  font-family: 'fantasy';
+  font-weight: 800;
+}
+
+.nav,.nav ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:inline-block;
+}
+
+.nav ul {
+  height:0;
+  left:0;
+  overflow:hidden;
+  position:absolute;
+  top:80px;
+}
+
+.nav li {
+	z-index: 99;
+  float:left;
+  position:relative;
+}
+
+.nav li div {
+  -moz-transition:0.5s;
+  -o-transition:0.5s;
+  -webkit-transition:0.5s;
+  background-color:linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
+  color:#fff;
+  display:block;
+  font-size:20px;
+  line-height:60px;
+  padding:10px 20px;
+  text-decoration:none;
+  transition:0.5s;
+}
+
+.nav li:hover > div {
+  background:#1888ff;
+  border-radius: 4px;
+  transition: all 0.2s ease-out;
+  color:#fff;
+}
+
+.nav li:hover ul.subs {
+  height:auto;
+  width:200px;
+}
+
+.nav ul li {
+  -moz-transition:0.5s;
+  -o-transition:0.5s;
+  -webkit-transition:0.5s;
+  opacity:0;
+  transition:0.5s;
+  width:95%;
+  text-align: left;
+}
+
+.nav li ul li {
+  -moz-transition-delay:0s;
+  -o-transition-delay:0s;
+  -webkit-transition-delay:0s;
+  transition-delay:0s;
+}
+
+.nav li:hover ul li {
+  opacity:1;
+  -moz-transition-delay:0s;
+  -o-transition-delay:0s;
+  -webkit-transition-delay:0s;
+  transition-delay:0s;
+}
+
+.nav ul li div {
+  background:#1888ff;
+  color:#fff;
+  line-height:1px;
+  -moz-transition:0.5s;
+  -o-transition:0.5s;
+  -webkit-transition:0.5s;
+  transition:0.5s;
+}
+
+.nav li:hover ul li div {
+  line-height:35px;
+  border: 1px solid #177deb;
+  border-radius: 2px;
+}
+
+.nav ul li div:hover {
+  background:#5cabff;
+}
+
+.nav li button{
+  padding:4px 40px;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  background-color: #1888ff;
+  margin-left: 0.2em;
+  position: absolute;
+}
+
+.nav li button:hover{
+  padding:4px 40px;
+  transition: all 0.3s ease-out;
+  background-color: transparent;
+  color: #fff;
+  border-radius: 4px;
+  border: 2px solid #1888ff;
+}
+
+.fa-bars {
+  color: #fff;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.menu-cerrar{
+  right:0;
+  overflow:hidden;
+  position:absolute;
+  top: 12px;
+  align-items: center;
+}
+
+.boton-cerrar{
+  font-size:15px;
+  margin-right: 0.1em;
+  padding:4px 30px;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  background-color: #1888ff;
+  width: 90%;
+}
+
+.boton-cerrar:hover{
+  padding:4px 30px;
+  transition: all 0.3s ease-out;
+  background-color: transparent;
+  color: #fff;
+  border-radius: 4px;
+  border: 2px solid #1888ff;
+}
+
+@media screen and (max-width: 1076px) {
+  .NavbarItems {
+    position: relative;
+  }
+
+  .menu-icon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-100%, 60%);
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+
+  .fa-times {
+    color: #fff;
+    font-size: 2rem;
+  }
+
+  .nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 210vh;
+    position: absolute;
+    top: 80px;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
+
+  .nav.active {
+    background: #242222;
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+  }
+
+  .nav li{
+    text-align: center;
+    padding: 0;
+    width: 100%;
+    display: table;
+  }
+
+  .nav li:hover ul.subs {
+      height:auto;
+      width:100%;
+      display:contents;
+  }
+
+  .nav li:hover ul li div {
+      line-height:35px;
+  }
+
+  .menu-cerrar{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    height: auto;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
+
+  .menu-cerrar.active{
+    left:35%;
+    z-index: 1;
+  }
+
+  .boton-cerrar{
+    text-align: center;
+    padding: 0;
+    width: 100%;
+    display: table;
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
+}

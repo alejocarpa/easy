@@ -1,0 +1,29 @@
+.login-container{
+  display:flex;
+}
+
+.login-formulario input{
+  font-size: 1em;
+  color: black;
+  padding: 0.1rem;
+  margin: 0.5rem;
+}
+
+.login-boton{
+  padding: 8px 20px;
+  border-radius: 2px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background-color: transparent;
+  border: 1px solid #fff;
+  transition: all 0.3s ease-out;
+  font-size: 20px;
+}
+
+.login-boton:hover{
+  color: #000;
+  background-color: #fff;
+  transition: all 0.5s ease-out;
+}

@@ -1,0 +1,23 @@
+.home-graficas{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    object-fit: contain;
+}
+
+.home-barras{
+    width: 80%;
+    height: auto;
+    margin:30px;
+    margin-left:auto;
+    margin-right: auto;
+    border: solid 3px rgb(28, 27, 27);
+}
+
+@media screen and (max-width: 500px){
+    .home-barras{
+        width: 100%;
+    }
+}
