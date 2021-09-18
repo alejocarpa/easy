@@ -83,7 +83,7 @@ function Pedido() {
 
     const enviarDatos = async (event) => {
         event.preventDefault();
-        alert(pantalla);
+        //alert(pantalla);
 
         let factura = "no";
         let proceso = "";

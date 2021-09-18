@@ -9,6 +9,7 @@ import Asesor from './componentes/asesor/Asesor';
 import Bodega from './componentes/bodega/Bodega';
 import Pedido from './componentes/pedido/Pedido';
 import Factura from './componentes/factura/Factura';
+import ConsolidadoIventario from './componentes/consolidado_inventario/ConsolidadoInventario';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/bodega" component={Bodega} />
           <Route path="/pedidos" component={Pedido} />
           <Route path="/facturacion" component={Factura} />
+          <Route path="/informes/consolidado_inventario" component={ConsolidadoIventario} />
         </Switch>
       </BrowserRouter>
     </div>

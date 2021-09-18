@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import Dominio from './../../dominio';
@@ -7,7 +7,8 @@ const cookies = new Cookies();
 
 function DetallePedido(props) {
     const resultado = props.respuesta_json;
-
+    const cambioPantallaPedido = props.cambiarPantalla;
+    
     const [anchoVentana, setAnchoVentana] = useState(window.innerWidth);
     const [arrayPedidos, setArrayPedidos] = useState([]);
     const [contador, setContador] = useState(0);
@@ -72,6 +73,7 @@ function DetallePedido(props) {
             })
         setArrayPedidos([]);
         setContador(0);
+        cambioPantallaPedido('Consultar');
     }
 
     useEffect(() => {
@@ -85,7 +87,7 @@ function DetallePedido(props) {
     }, []);
 
     useEffect(() => {
-        console.log(resultado);
+        //console.log(resultado);
         setArrayPedidos([]);
         setContador(0);
         
@@ -147,8 +149,8 @@ function DetallePedido(props) {
 
             }
 
-            <div><input type="text" name="array_pedidos" id="array_pedidos" value={arrayPedidos} /></div>
-            <div><input type="text" name="tamano_consulta" id="tamano_consulta" value={contador} /></div>
+            <div><input type="hidden" name="array_pedidos" id="array_pedidos" value={arrayPedidos} /></div>
+            <div><input type="hidden" name="tamano_consulta" id="tamano_consulta" value={contador} /></div>
         </div>
     )
 }

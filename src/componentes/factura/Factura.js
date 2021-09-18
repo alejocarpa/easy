@@ -177,6 +177,11 @@ function Factura() {
 
     const handleFocus = (event) => event.target.select();
 
+    const cambioPantallaPedido = (pantalla) => {
+        setPantalla(pantalla);
+        setPedidos([]);
+    }
+
     useEffect(() => {
         const UrlClientes = `${Dominio}/cliente/cliente`;
 
@@ -352,7 +357,7 @@ function Factura() {
                     <Detalle respuesta_json={detalle} editar={editar} pag={paginado} /> 
                 : 
                 pantalla === "Buscar Pedido" ? 
-                    <DetallePedido respuesta_json={pedidos} count={0} /> 
+                    <DetallePedido respuesta_json={pedidos} cambiarPantalla={cambioPantallaPedido} count={0} /> 
                 : 
                 ""
             }
