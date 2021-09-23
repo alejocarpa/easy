@@ -10,6 +10,8 @@ import Bodega from './componentes/bodega/Bodega';
 import Pedido from './componentes/pedido/Pedido';
 import Factura from './componentes/factura/Factura';
 import ConsolidadoIventario from './componentes/consolidado_inventario/ConsolidadoInventario';
+import Empresa from './componentes/empresa/Empresa';
+import Proveedor from './componentes/proveedor/Proveedor';
 
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
           <Route path="/pedidos" component={Pedido} />
           <Route path="/facturacion" component={Factura} />
           <Route path="/informes/consolidado_inventario" component={ConsolidadoIventario} />
+          <Route path="/empresa" component={Empresa} />
+          <Route path="/proveedor" component={Proveedor} />
         </Switch>
       </BrowserRouter>
     </div>

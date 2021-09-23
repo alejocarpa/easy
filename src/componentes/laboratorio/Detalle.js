@@ -46,10 +46,10 @@ function Detalle(props) {
                     <tbody>
                     {!resultado.result ? <tr><td>cargando...</td></tr> : resultado.result.map((laboratorio, index) => {
                         return <tr key={index}>
-                                    <td>{laboratorio.gru_codigo}</td>
-                                    <td>{laboratorio.gru_nombre}</td>
-                                    <td>{laboratorio.gru_estado==="A" ? "Activo" : "Inactivo"}</td>
-                                    <td><button onClick={()=>props.editar(laboratorio.gru_codigo)}>Editar</button></td>
+                                    <td className="align-middle">{laboratorio.gru_codigo}</td>
+                                    <td className="align-middle">{laboratorio.gru_nombre}</td>
+                                    <td className="align-middle">{laboratorio.gru_estado==="A" ? "Activo" : "Inactivo"}</td>
+                                    <td><button className="btn btn-primary" onClick={()=>props.editar(laboratorio.gru_codigo)}>Editar</button></td>
                                 </tr>
                                 
                     })}
@@ -72,9 +72,9 @@ function Detalle(props) {
             
             }
 
-            <div>
-                <button onClick={()=>props.pag(resultado.anterior_pagina)}>anterior</button>
-                <button onClick={()=>props.pag(resultado.siguiente_pagina)}>siguiente</button>
+            <div className="col text-center">
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.anterior_pagina)}>anterior</button>
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.siguiente_pagina)}>siguiente</button>
             </div>
             
         </div>

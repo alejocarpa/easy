@@ -57,14 +57,14 @@ function Detalle(props) {
                             }
                         }
                         return <tr key={index}>
-                                    <td>{inventario.mov_produc}</td>
-                                    <td>{inventario.mov_nompro}</td>
-                                    <td>{inventario.gru_nombre}</td>
-                                    <td className="text-center">{inventario.mov_stock}</td>
-                                    <td className="text-center">{cantidad_medida2}</td>
-                                    <td className="text-center">{cantidad_medida3}</td>
-                                    <td>{inventario.pro_compra}</td>
-                                    <td>{inventario.mov_fechav}</td>
+                                    <td className="align-middle">{inventario.mov_produc}</td>
+                                    <td className="align-middle">{inventario.mov_nompro}</td>
+                                    <td className="align-middle">{inventario.gru_nombre}</td>
+                                    <td className="fs-3 fw-bold text-wrap text-center">{inventario.mov_stock}</td>
+                                    <td className="align-middle text-center">{cantidad_medida2}</td>
+                                    <td className="align-middle text-center">{cantidad_medida3}</td>
+                                    <td className="align-middle">${new Intl.NumberFormat("de-DE").format(Math.round(inventario.pro_compra))}</td>
+                                    <td className="align-middle">{inventario.mov_fechav}</td>
                                 </tr>
                                 
                     })}
@@ -99,9 +99,9 @@ function Detalle(props) {
             
             }
 
-            <div>
-                <button onClick={()=>props.pag(resultado.anterior_pagina)}>anterior</button>
-                <button onClick={()=>props.pag(resultado.siguiente_pagina)}>siguiente</button>
+            <div className="col text-center">
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.anterior_pagina)}>anterior</button>
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.siguiente_pagina)}>siguiente</button>
             </div>
             
         </div>

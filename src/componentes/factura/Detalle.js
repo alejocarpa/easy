@@ -114,17 +114,17 @@ function Detalle(props) {
                     <tbody>
                         {!resultado.result ? <tr><td>cargando...</td></tr> : resultado.result.map((factura, index) => {
                             return <tr key={index}>
-                                <td><input type="checkbox" name="check" id={factura.fac_numero} onClick={() => arreglo_factura(factura.fac_numero)} /></td>
-                                <td>{factura.fac_numero}</td>
-                                <td>{factura.fac_pedido}</td>
-                                <td>{factura.cli_nombre1 + ' ' + factura.cli_apelli1}</td>
-                                <td>${new Intl.NumberFormat("de-DE").format(Math.round(factura.fac_valortotal))}</td>
-                                <td>{factura.fac_estado === "C" ? "Cancelada" : factura.fac_estado === "P" ? "Pendiente" : factura.fac_estado === "A" ? "Anulada" : ""}</td>
-                                <td>{factura.fac_fechac}</td>
-                                <td>{factura.fac_horac}</td>
-                                <td>{factura.fac_credit === "0" ? "Contado" : factura.fac_credit === "1" ? "Credito" : ""}</td>
-                                <td>{factura.fac_tipo === "F" ? "Factura" : "Remision"}</td>
-                                <td><button onClick={() => props.editar(factura.fac_numero)}>Editar</button></td>
+                                <td className="align-middle"><input type="checkbox" name="check" id={factura.fac_numero} onClick={() => arreglo_factura(factura.fac_numero)} /></td>
+                                <td className="align-middle">{factura.fac_numero}</td>
+                                <td className="align-middle">{factura.fac_pedido}</td>
+                                <td className="align-middle">{factura.cli_nombre1 + ' ' + factura.cli_apelli1}</td>
+                                <td className="align-middle">${new Intl.NumberFormat("de-DE").format(Math.round(factura.fac_valortotal))}</td>
+                                <td className="align-middle">{factura.fac_estado === "C" ? "Cancelada" : factura.fac_estado === "P" ? "Pendiente" : factura.fac_estado === "A" ? "Anulada" : ""}</td>
+                                <td className="align-middle">{factura.fac_fechac}</td>
+                                <td className="align-middle">{factura.fac_horac}</td>
+                                <td className="align-middle">{factura.fac_credit === "0" ? "Contado" : factura.fac_credit === "1" ? "Credito" : ""}</td>
+                                <td className="align-middle">{factura.fac_tipo === "F" ? "Factura" : "Remision"}</td>
+                                <td><button className="btn btn-primary" onClick={() => props.editar(factura.fac_numero)}>Editar</button></td>
                             </tr>
 
                         })}

@@ -45,10 +45,10 @@ function Detalle(props) {
                     <tbody>
                     {!resultado.result ? <tr><td>cargando...</td></tr> : resultado.result.map((asesor, index) => {
                         return <tr key={index}>
-                                    <td>{asesor.ase_codigo}</td>
-                                    <td>{asesor.ase_nombre}</td>
-                                    <td>{asesor.ase_bodega}</td>
-                                    <td><button onClick={()=>props.editar(asesor.ase_codigo)}>Editar</button></td>
+                                    <td className="align-middle">{asesor.ase_codigo}</td>
+                                    <td className="align-middle">{asesor.ase_nombre}</td>
+                                    <td className="align-middle">{asesor.ase_bodega}</td>
+                                    <td><button className="btn btn-primary" onClick={()=>props.editar(asesor.ase_codigo)}>Editar</button></td>
                                 </tr>
                                 
                     })}
@@ -71,9 +71,9 @@ function Detalle(props) {
             
             }
 
-            <div>
-                <button onClick={()=>props.pag(resultado.anterior_pagina)}>anterior</button>
-                <button onClick={()=>props.pag(resultado.siguiente_pagina)}>siguiente</button>
+            <div className="col text-center">
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.anterior_pagina)}>anterior</button>
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.siguiente_pagina)}>siguiente</button>
             </div>
             
         </div>

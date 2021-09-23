@@ -50,15 +50,15 @@ function Detalle(props) {
                     <tbody>
                     {!resultado.result ? <tr><td>cargando...</td></tr> : resultado.result.map((bodega, index) => {
                         return <tr key={index}>
-                                    <td>{bodega.bod_codigo}</td>
-                                    <td>{bodega.bod_nombre}</td>
-                                    <td>{bodega.bod_resolu}</td>
-                                    <td>{bodega.bod_facini}</td>
-                                    <td>{bodega.bod_facfin}</td>
-                                    <td>{bodega.bod_prefij}</td>
-                                    <td>{bodega.bod_consec}</td>
-                                    <td>{bodega.bod_regime}</td>
-                                    <td><button onClick={()=>props.editar(bodega.bod_codigo)}>Editar</button></td>
+                                    <td className="align-middle">{bodega.bod_codigo}</td>
+                                    <td className="align-middle">{bodega.bod_nombre}</td>
+                                    <td className="align-middle">{bodega.bod_resolu}</td>
+                                    <td className="align-middle">{bodega.bod_facini}</td>
+                                    <td className="align-middle">{bodega.bod_facfin}</td>
+                                    <td className="align-middle">{bodega.bod_prefij}</td>
+                                    <td className="align-middle">{bodega.bod_consec}</td>
+                                    <td className="align-middle">{bodega.bod_regime}</td>
+                                    <td><button className="btn btn-primary" onClick={()=>props.editar(bodega.bod_codigo)}>Editar</button></td>
                                 </tr>
                                 
                     })}
@@ -86,9 +86,9 @@ function Detalle(props) {
             
             }
 
-            <div>
-                <button onClick={()=>props.pag(resultado.anterior_pagina)}>anterior</button>
-                <button onClick={()=>props.pag(resultado.siguiente_pagina)}>siguiente</button>
+            <div className="col text-center">
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.anterior_pagina)}>anterior</button>
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.siguiente_pagina)}>siguiente</button>
             </div>
             
         </div>

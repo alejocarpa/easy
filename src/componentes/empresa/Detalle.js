@@ -33,30 +33,33 @@ function Detalle(props) {
             {anchoVentana > 768 ? 
 
                 <table className="table table-dark table-hover">
+                    
                     <thead>
                         <tr>
                             <th className="encabezado-detalle">Codigo</th>
                             <th className="encabezado-detalle">Nombre</th>
-                            <th className="encabezado-detalle">Precio sin iva</th>
-                            <th className="encabezado-detalle">% IVA</th>
-                            <th className="encabezado-detalle">Costo</th>
-                            <th className="encabezado-detalle">Grupo</th>
-                            <th className="encabezado-detalle">Estado</th>
+                            <th className="encabezado-detalle">Nit</th>
+                            <th className="encabezado-detalle">Dirección</th>
+                            <th className="encabezado-detalle">Barrio</th>
+                            <th className="encabezado-detalle">Teléfono</th>
+                            <th className="encabezado-detalle">Celular</th>
+                            <th className="encabezado-detalle">Email</th>
                             <th className="encabezado-detalle"></th>
                         </tr>
                     </thead>
                 
                     <tbody>
-                    {!resultado.result ? <tr><td>cargando...</td></tr> : resultado.result.map((producto, index) => {
+                    {!resultado.result ? <tr><td>cargando...</td></tr> : resultado.result.map((empresa, index) => {
                         return <tr key={index}>
-                                    <td className="align-middle">{producto.pro_codigo}</td>
-                                    <td className="align-middle">{producto.pro_nombre}</td>
-                                    <td className="align-middle text-center">${new Intl.NumberFormat("de-DE").format(Math.round(producto.pro_costo))}</td>
-                                    <td className="align-middle text-center">{producto.pro_iva}</td>
-                                    <td className="align-middle text-center">${new Intl.NumberFormat("de-DE").format(Math.round(producto.pro_compra))}</td>
-                                    <td className="align-middle">{producto.gru_nombre}</td>
-                                    <td className="align-middle">{producto.pro_estado==="A" ? "Activo" : "Inactivo"}</td>
-                                    <td><button className="btn btn-primary" onClick={()=>props.editar(producto.pro_codigo)}>Editar</button></td>
+                                    <td className="align-middle">{empresa.emp_codigo}</td>
+                                    <td className="align-middle">{empresa.emp_nombre}</td>
+                                    <td className="align-middle">{empresa.emp_nit}</td>
+                                    <td className="align-middle">{empresa.emp_direcc}</td>
+                                    <td className="align-middle">{empresa.emp_barrio}</td>
+                                    <td className="align-middle">{empresa.emp_telefo}</td>
+                                    <td className="align-middle">{empresa.emp_celula}</td>
+                                    <td className="align-middle">{empresa.emp_email}</td>
+                                    <td><button className="btn btn-primary" onClick={()=>props.editar(empresa.emp_codigo)}>Editar</button></td>
                                 </tr>
                                 
                     })}
@@ -65,18 +68,19 @@ function Detalle(props) {
             
             : 
             <div className="list-group">
-                {!resultado.result ? "cargando..." : resultado.result.map((producto, index) => {
+                {!resultado.result ? "cargando..." : resultado.result.map((empresa, index) => {
                     return <div key={index} className="list-group-item list-group-item-action bg-dark text-white border-white">
                                 <div className="d-flex w-100 justify-content-between">
-                                    <h5 className="mb-1">Código: {producto.pro_codigo}</h5>
-                                    <small onClick={()=>props.editar(producto.pro_codigo)}>Editar</small>
+                                    <h5 className="mb-1">Código: {empresa.emp_codigo}</h5>
+                                    <small onClick={()=>props.editar(empresa.emp_codigo)}>Editar</small>
                                 </div>
-                                <p className="mb-1"><b>Nombre</b>: {producto.pro_nombre}</p>
-                                <p className="mb-1"><b>Precio sin iva</b>: {producto.pro_costo}</p>
-                                <p className="mb-1"><b>% IVA</b>: {producto.pro_iva}</p>
-                                <p className="mb-1"><b>Costo</b>: {producto.pro_compra}</p>
-                                <p className="mb-1"><b>Grupo</b>: {producto.gru_nombre}</p>
-                                <p className="mb-1"><b>Estado</b>: {producto.pro_estado==="A" ? "Activo" : "Inactivo"}</p>
+                                <p className="mb-1"><b>Nombre</b>: {empresa.emp_nombre}</p>
+                                <p className="mb-1"><b>Nit</b>: {empresa.emp_nit}</p>
+                                <p className="mb-1"><b>Dirección</b>: {empresa.emp_direcc}</p>
+                                <p className="mb-1"><b>Barrio</b>: {empresa.emp_barrio}</p>
+                                <p className="mb-1"><b>Teléfono</b>: {empresa.emp_telefo}</p>
+                                <p className="mb-1"><b>Celular</b>: {empresa.emp_celula}</p>
+                                <p className="mb-1"><b>Email</b>: {empresa.emp_email}</p>
                             </div>
                 })}
             </div>

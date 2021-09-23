@@ -53,17 +53,17 @@ function Detalle(props) {
                     <tbody>
                     {!resultado.result ? <tr><td>cargando...</td></tr> : resultado.result.map((pedido, index) => {
                         return <tr key={index}>
-                                    <td><button name="verdetalle" onClick={()=>props.ver(pedido.ped_codigo)} >Ver detalle</button></td>
-                                    <td>{pedido.ped_codigo}</td>
-                                    <td>{pedido.cli_nombre1+' '+pedido.cli_apelli1}</td>
-                                    <td>{pedido.ped_estado}</td>
-                                    <td className="text-end">${new Intl.NumberFormat("de-DE").format(Math.round(pedido.ped_valor))}</td>
-                                    <td className="text-end">${new Intl.NumberFormat("de-DE").format(Math.round(pedido.ped_iva))}</td>
-                                    <td className="text-end">${new Intl.NumberFormat("de-DE").format(pedido.ped_descue)}</td>
-                                    <td className="text-end">${new Intl.NumberFormat("de-DE").format(Math.round(pedido.ped_valortotal))}</td>
-                                    <td>{pedido.ped_fechac}</td>
-                                    <td>{pedido.ped_estado==="Pendiente" ? <button onClick={()=>props.editar(pedido.ped_codigo)}>Editar</button> : ""}</td>
-                                    <td>{pedido.ped_estado==="Pendiente" ? <button onClick={()=>props.anular(pedido.ped_codigo)}>Anular</button> : ""}</td>
+                                    <td className="align-middle"><button className="btn btn-primary" name="verdetalle" onClick={()=>props.ver(pedido.ped_codigo)} >Ver detalle</button></td>
+                                    <td className="align-middle">{pedido.ped_codigo}</td>
+                                    <td className="align-middle">{pedido.cli_nombre1+' '+pedido.cli_apelli1}</td>
+                                    <td className="align-middle">{pedido.ped_estado}</td>
+                                    <td className="text-end align-middle">${new Intl.NumberFormat("de-DE").format(Math.round(pedido.ped_valor))}</td>
+                                    <td className="text-end align-middle">${new Intl.NumberFormat("de-DE").format(Math.round(pedido.ped_iva))}</td>
+                                    <td className="text-end align-middle">${new Intl.NumberFormat("de-DE").format(pedido.ped_descue)}</td>
+                                    <td className="text-end align-middle">${new Intl.NumberFormat("de-DE").format(Math.round(pedido.ped_valortotal))}</td>
+                                    <td className="align-middle">{pedido.ped_fechac}</td>
+                                    <td className="align-middle">{pedido.ped_estado==="Pendiente" ? <button className="btn btn-primary" onClick={()=>props.editar(pedido.ped_codigo)}>Editar</button> : ""}</td>
+                                    <td>{pedido.ped_estado==="Pendiente" ? <button className="btn btn-primary" onClick={()=>props.anular(pedido.ped_codigo)}>Anular</button> : ""}</td>
                                 </tr>
                                 
                     })}
@@ -93,7 +93,7 @@ function Detalle(props) {
             }
 
             <div className="col text-center">
-                <button className="btn btn-light" onClick={()=>props.pag(resultado.anterior_pagina)}>Anterior</button>
+                <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.anterior_pagina)}>Anterior</button>
                 <button className="btn btn-outline-light" onClick={()=>props.pag(resultado.siguiente_pagina)}>Siguiente</button>
             </div>
             
