@@ -12,6 +12,7 @@ import Factura from './componentes/factura/Factura';
 import ConsolidadoIventario from './componentes/consolidado_inventario/ConsolidadoInventario';
 import Empresa from './componentes/empresa/Empresa';
 import Proveedor from './componentes/proveedor/Proveedor';
+import Inventario from './componentes/inventario/inventario';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/informes/consolidado_inventario" component={ConsolidadoIventario} />
           <Route path="/empresa" component={Empresa} />
           <Route path="/proveedor" component={Proveedor} />
+          <Route path="/inventario" component={Inventario} />
         </Switch>
       </BrowserRouter>
     </div>
