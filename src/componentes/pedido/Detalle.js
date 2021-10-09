@@ -30,7 +30,7 @@ function Detalle(props) {
                     </a>
                 </div>
             </div>
-            {anchoVentana > 768 ? 
+            {anchoVentana > 1114 ? 
 
                 <table className="table table-dark table-hover">
                     
@@ -45,6 +45,8 @@ function Detalle(props) {
                             <th className="encabezado-detalle text-end">Descuento</th>
                             <th className="encabezado-detalle text-end">Valor total</th>
                             <th className="encabezado-detalle">Fecha</th>
+                            <th className="encabezado-detalle">Medio de Pago</th>
+                            <th className="encabezado-detalle">Observación</th>
                             <th className="encabezado-detalle"></th>
                             <th className="encabezado-detalle"></th>
                         </tr>
@@ -62,6 +64,8 @@ function Detalle(props) {
                                     <td className="text-end align-middle">${new Intl.NumberFormat("de-DE").format(pedido.ped_descue)}</td>
                                     <td className="text-end align-middle">${new Intl.NumberFormat("de-DE").format(Math.round(pedido.ped_valortotal))}</td>
                                     <td className="align-middle">{pedido.ped_fechac}</td>
+                                    <td className="align-middle">{pedido.ped_medpag}</td>
+                                    <td className="align-middle">{pedido.ped_observ}</td>
                                     <td className="align-middle">{pedido.ped_estado==="Pendiente" ? <button className="btn btn-primary" onClick={()=>props.editar(pedido.ped_codigo)}>Editar</button> : ""}</td>
                                     <td>{pedido.ped_estado==="Pendiente" ? <button className="btn btn-primary" onClick={()=>props.anular(pedido.ped_codigo)}>Anular</button> : ""}</td>
                                 </tr>
@@ -86,6 +90,8 @@ function Detalle(props) {
                                 <p className="mb-1"><b>IVA</b>: ${new Intl.NumberFormat("de-DE").format(pedido.ped_iva)}</p>
                                 <p className="mb-1"><b>Valor total</b>: ${new Intl.NumberFormat("de-DE").format(pedido.ped_valortotal)}</p>
                                 <p className="mb-1"><b>Estado</b>: {pedido.ped_estado}</p>
+                                <p className="mb-1"><b>Medio de Pago</b>: {pedido.ped_medpag}</p>
+                                <p className="mb-1"><b>Observación</b>: {pedido.ped_observ}</p>
                             </div>
                 })}
             </div>

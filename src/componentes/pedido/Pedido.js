@@ -16,6 +16,8 @@ function Pedido() {
     const añoActual = fecha.getFullYear();
     const mesActual = fecha.getMonth() + 1;
     const diaActual = fecha.getDate();
+    let extender_observacion = "col-md-6 p-2";
+    
     let ceroMes = ''
     if (mesActual < 10) {
         ceroMes = '0';
@@ -34,7 +36,9 @@ function Pedido() {
     const [clientes, setClientes] = useState([]);
     const [asesores, setAsesores] = useState([]);
     const [carProducto, setcarProducto] = useState();
-    const [codigo_cliente_automatico, setCodigo_cliente_automatico] = useState('');
+    const [codigo_cliente_automatico, setCodigo_cliente_automatico] = useState('NO');
+    const [unidad_de_medida, setUnidad_de_medida] = useState('NO');
+    const [campo_medio_de_pago, setCampo_medio_de_pago] = useState('NO');
     const [array_productos, setArray_productos] = useState([]);
     const [array_cantidades, setArray_cantidades] = useState([]);
     const [array_medidas, setArray_medidas] = useState([]);
@@ -43,6 +47,10 @@ function Pedido() {
     const [valor_total, setValor_total] = useState(0);
     const [devuelta, setDevuelta] = useState('');
     const [verDetalle, setVerDetalle] = useState([]);
+
+    if(campo_medio_de_pago === "SI"){
+        extender_observacion="col-md-3 p-2";
+    }
 
     const UrlModulos = `${Dominio}/pedido/pedido`;
 
@@ -60,7 +68,8 @@ function Pedido() {
         pro_codbar: '',
         pro_nombre: '',
         pro_codigo: '',
-        efectivo: 0
+        efectivo: 0,
+        medio_pago: ''
     });
 
 
@@ -108,6 +117,7 @@ function Pedido() {
                 ped_client: datos.cliente,
                 ped_asesor: datos.asesor,
                 ped_estado: datos.estado,
+                ped_medpag: datos.medio_pago,
                 fecha1: datos.fecha1,
                 fecha2: datos.fecha2,
                 limite: 'SI'
@@ -127,6 +137,7 @@ function Pedido() {
                 ped_client: datos.cliente,
                 ped_observ: datos.observacion,
                 ped_asesor: datos.asesor,
+                ped_medpag: datos.medio_pago,
                 credito: datos.credito,
                 abono: datos.abono,
                 descuento: datos.descuento,
@@ -151,7 +162,9 @@ function Pedido() {
                             descuento: 0,
                             pro_codbar: '',
                             pro_nombre: '',
-                            pro_codigo: ''
+                            pro_codigo: '',
+                            medio_pago: '',
+                            asesor: ''
                         });
 
                         setArray_productos([]);
@@ -183,6 +196,7 @@ function Pedido() {
                 ped_client: datos.cliente,
                 ped_observ: datos.observacion,
                 ped_asesor: datos.asesor,
+                ped_medpag: datos.medio_pago,
                 credito: datos.credito,
                 abono: datos.abono,
                 descuento: datos.descuento,
@@ -208,7 +222,9 @@ function Pedido() {
                             pro_codbar: '',
                             pro_nombre: '',
                             pro_codigo: '',
-                            estado: ''
+                            estado: '',
+                            medio_pago: '',
+                            asesor: ''
                         })
 
                         setArray_productos([]);
@@ -248,6 +264,7 @@ function Pedido() {
     const cambiarPantalla = (e) => {
         //alert(e.target.value);
         let codigo_cliente = '';
+        let codigo_asesor = '';
         setPantalla(e.target.value);
 
         if (e.target.value === "Actualizar") {
@@ -262,14 +279,43 @@ function Pedido() {
             if (codigo_cliente_automatico === "SI") {
                 codigo_cliente = '1';
             }
-        }
 
-        if (e.target.value === "Nuevo" || e.target.value === "Limpiar" || e.target.value === "Consultar") {
+            if (asesores) {
+                asesores.map((asesor, index) => {
+                    if (index === 0) {
+                        codigo_asesor = asesor.ase_codigo;
+                    }
+                })
+            }
+
             setDatos({
                 ...datos,
                 codigo: '',
                 estado: '',
-                cliente: codigo_cliente
+                cliente: codigo_cliente,
+                asesor: codigo_asesor,
+                fecha1: fechaDesde,
+                fecha2: fechaActual,
+                observacion: '',
+                credito: 0,
+                abono: 0,
+                descuento: 0,
+                pro_codbar: '',
+                pro_nombre: '',
+                pro_codigo: '',
+                efectivo: 0,
+                medio_pago: 'efectivo'
+            })
+        }
+
+        if (e.target.value === "Limpiar" || e.target.value === "Consultar") {
+            setDatos({
+                ...datos,
+                codigo: '',
+                estado: '',
+                cliente: '',
+                asesor: '',
+                medio_pago: ''
             })
 
             if (e.target.value === "Limpiar") {
@@ -287,6 +333,7 @@ function Pedido() {
 
     const editar = async (codigo) => {
         //alert("editar "+codigo);
+        window.scrollTo(0, 0);
         setPantalla("Editar");
         setBloquea(true);
         setObligatorio(true);
@@ -307,13 +354,13 @@ function Pedido() {
                             ...datos,
                             codigo: dato.ped_codigo,
                             cliente: dato.ped_client,
-                            asesor: dato.ped_asesor + '-' + dato.ase_nombre,
+                            asesor: dato.ped_asesor,
                             estado: dato.ped_estado,
                             observacion: dato.ped_observ,
                             credito: dato.ped_credit,
                             abono: dato.ped_abono,
                             descuento: dato.ped_descue,
-
+                            medio_pago: dato.ped_medpag
                         })}
                     </div>
                 })
@@ -337,13 +384,17 @@ function Pedido() {
 
                         valor_total = valor_total + (dato.valor_mas_iva * dato.ped_cantid);
 
+                        let td4 = '';
+
                         let tr = tbody.appendChild(document.createElement('tr'));
                         tr.id = 'fila/' + dato.ped_produc;
                         let td = tr.appendChild(document.createElement('td'));
                         let td2 = tr.appendChild(document.createElement('td'));
                         let td3 = tr.appendChild(document.createElement('td'));
                         td3.id = 'precio/' + dato.ped_produc;
-                        let td4 = tr.appendChild(document.createElement('td'));
+                        if (unidad_de_medida === "SI") {
+                            td4 = tr.appendChild(document.createElement('td'));
+                        }
                         let td5 = tr.appendChild(document.createElement('td'));
                         let td6 = tr.appendChild(document.createElement('td'));
                         let selected_unidad = false;
@@ -362,25 +413,27 @@ function Pedido() {
                         cantidad.value = dato.ped_cantid;
                         cantidad.addEventListener('keyup', cambiarCantidad);
 
-                        let select_medida = td4.appendChild(document.createElement('select'));
-                        select_medida.name = 'medida';
-                        select_medida.id = 'medida/' + dato.ped_produc;
-                        select_medida.addEventListener('change', cambiarMedida);
+                        if (unidad_de_medida === "SI") {
+                            let select_medida = td4.appendChild(document.createElement('select'));
+                            select_medida.name = 'medida';
+                            select_medida.id = 'medida/' + dato.ped_produc;
+                            select_medida.addEventListener('change', cambiarMedida);
 
-                        let option_unidad = select_medida.appendChild(document.createElement('option'));
-                        option_unidad.value = 'Unidad';
-                        option_unidad.innerHTML = 'Unidad';
-                        if (selected_unidad) { option_unidad.selected = "true" }
+                            let option_unidad = select_medida.appendChild(document.createElement('option'));
+                            option_unidad.value = 'Unidad';
+                            option_unidad.innerHTML = 'Unidad';
+                            if (selected_unidad) { option_unidad.selected = "true" }
 
-                        let option_blister = select_medida.appendChild(document.createElement('option'));
-                        option_blister.value = 'Blister';
-                        option_blister.innerHTML = 'Blister';
-                        if (selected_blister) { option_blister.selected = "true" }
+                            let option_blister = select_medida.appendChild(document.createElement('option'));
+                            option_blister.value = 'Blister';
+                            option_blister.innerHTML = 'Blister';
+                            if (selected_blister) { option_blister.selected = "true" }
 
-                        let option_caja = select_medida.appendChild(document.createElement('option'));
-                        option_caja.value = 'Caja';
-                        option_caja.innerHTML = 'Caja';
-                        if (selected_caja) { option_caja.selected = "true" }
+                            let option_caja = select_medida.appendChild(document.createElement('option'));
+                            option_caja.value = 'Caja';
+                            option_caja.innerHTML = 'Caja';
+                            if (selected_caja) { option_caja.selected = "true" }
+                        }
 
                         let boton = td6.appendChild(document.createElement('button'));
                         boton.type = 'button';
@@ -637,6 +690,8 @@ function Pedido() {
 
             setArray_precios([...array_precios, valor_mas_iva]);
 
+            let td4 = '';
+
             let tbody = document.createElement('tbody');
             let tr = tbody.appendChild(document.createElement('tr'));
             tr.id = 'fila/' + codigo_producto;
@@ -644,7 +699,9 @@ function Pedido() {
             let td2 = tr.appendChild(document.createElement('td'));
             let td3 = tr.appendChild(document.createElement('td'));
             td3.id = 'precio/' + codigo_producto;
-            let td4 = tr.appendChild(document.createElement('td'));
+            if (unidad_de_medida === "SI") {
+                td4 = tr.appendChild(document.createElement('td'));
+            }
             let td5 = tr.appendChild(document.createElement('td'));
             let td6 = tr.appendChild(document.createElement('td'));
 
@@ -656,22 +713,24 @@ function Pedido() {
             cantidad.value = 1;
             cantidad.addEventListener('keyup', cambiarCantidad);
 
-            let select_medida = td4.appendChild(document.createElement('select'));
-            select_medida.name = 'medida';
-            select_medida.id = 'medida/' + codigo_producto;
-            select_medida.addEventListener('change', cambiarMedida);
+            if (unidad_de_medida === "SI") {
+                let select_medida = td4.appendChild(document.createElement('select'));
+                select_medida.name = 'medida';
+                select_medida.id = 'medida/' + codigo_producto;
+                select_medida.addEventListener('change', cambiarMedida);
 
-            let option_unidad = select_medida.appendChild(document.createElement('option'));
-            option_unidad.value = 'Unidad';
-            option_unidad.innerHTML = 'Unidad';
+                let option_unidad = select_medida.appendChild(document.createElement('option'));
+                option_unidad.value = 'Unidad';
+                option_unidad.innerHTML = 'Unidad';
 
-            let option_blister = select_medida.appendChild(document.createElement('option'));
-            option_blister.value = 'Blister';
-            option_blister.innerHTML = 'Blister';
+                let option_blister = select_medida.appendChild(document.createElement('option'));
+                option_blister.value = 'Blister';
+                option_blister.innerHTML = 'Blister';
 
-            let option_caja = select_medida.appendChild(document.createElement('option'));
-            option_caja.value = 'Caja';
-            option_caja.innerHTML = 'Caja';
+                let option_caja = select_medida.appendChild(document.createElement('option'));
+                option_caja.value = 'Caja';
+                option_caja.innerHTML = 'Caja';
+            }
 
             let boton = td6.appendChild(document.createElement('button'));
             boton.type = 'button';
@@ -903,7 +962,7 @@ function Pedido() {
         }
 
         let total_menos_descuento = total - datos.descuento;
-        
+
         setValor_total(total_menos_descuento);
     }, [datos.descuento, valor_total])
 
@@ -928,50 +987,28 @@ function Pedido() {
         const UrlAsesores = `${Dominio}/asesor/asesor`;
 
         const obtenerAsesores = async () => {
+            let codigo_asesor = '';
+            if (cookies.get('aut_asesor') !== "null") {
+                codigo_asesor = cookies.get('aut_asesor');
+            }
             await axios.post(UrlAsesores, {
                 aut_ip: cookies.get('aut_ip'),
                 aut_bd: cookies.get('aut_bd'),
+                ase_codigo: codigo_asesor,
                 metodo: 'Buscar',
                 limite: 'NO'
             })
                 .then(response => {
                     const respuesta = response.data;
                     //console.log(respuesta);
-                    setAsesores(respuesta.result)
+                    setAsesores(respuesta.result);
+                    setDatos({
+                        ...datos,
+                        asesor: codigo_asesor
+                    })
                 })
         }
         obtenerAsesores();
-
-        const asesorEspecifico = () => {
-            let aut_asesor = '';
-            if (cookies.get('aut_asesor') !== "null") {
-                const UrlAsesores = `${Dominio}/asesor/asesor`;
-                axios.post(UrlAsesores, {
-                    aut_ip: cookies.get('aut_ip'),
-                    aut_bd: cookies.get('aut_bd'),
-                    metodo: 'Buscar',
-                    ase_codigo: cookies.get('aut_asesor'),
-                    limite: 'SI',
-                })
-                    .then(response => {
-                        const respuesta = response.data;
-                        //console.log(respuesta.result);
-                        let codigo_asesor
-                        let nombre_asesor
-                        respuesta.result.map((asesor, index) => {
-                            codigo_asesor = asesor.ase_codigo;
-                            nombre_asesor = asesor.ase_nombre;
-                        });
-                        aut_asesor = codigo_asesor + '-' + nombre_asesor;
-                        //console.log('aut_asesor='+aut_asesor);
-                        setDatos({
-                            ...datos,
-                            asesor: aut_asesor
-                        })
-                    })
-            }
-        }
-        asesorEspecifico();
 
         const UrlParametros = `${Dominio}/parametros/parametros`;
 
@@ -988,14 +1025,24 @@ function Pedido() {
                         if (dato.par_nombre === "CODIGO_CLIENTE_AUTOMATICO") {
                             setCodigo_cliente_automatico(dato.par_valor);
                         }
+
+                        if (dato.par_nombre === "UNIDAD_DE_MEDIDA") {
+                            setUnidad_de_medida(dato.par_valor);
+                        }
+
+                        if (dato.par_nombre === "CAMPO_MEDIO_DE_PAGO") {
+                            setCampo_medio_de_pago(dato.par_valor);
+                        }
                         return "";
                     })
                 })
         }
         obtenerParametros();
+
     }, [])
 
     return (
+
         <div className="container-completo">
             <Menu />
             <div className="container mt-3">
@@ -1021,16 +1068,43 @@ function Pedido() {
                         </div>
                         <div className="col-md-3 p-2">
                             <label className="form-label"><b>Asesor</b></label>
-                            <input className="form-control" type="text" list="datalistOptions2" name="asesor" value={datos.asesor} placeholder="Buscar..." onChange={handleInputChange} />
-                            <datalist id="datalistOptions2">
-                                {!asesores ? "Cargando..." : asesores.map((asesor, index) => {
-                                    return <option key={index} value={asesor.ase_codigo + '-' + asesor.ase_nombre}></option>
-                                })}
-                            </datalist>
+                            <select name="asesor" className="form-select" value={datos.asesor} onChange={handleInputChange} >
+                                {
+                                    pantalla === "Consultar" || pantalla === "Buscar" ? <option value="">Todos</option>
+                                        :
+                                        ""
+                                }
+                                {
+                                    !asesores ? "Cargando..."
+                                        :
+                                        asesores.map((asesor, index) => {
+                                            return <option key={index} value={asesor.ase_codigo}>{asesor.ase_codigo + '-' + asesor.ase_nombre}</option>
+                                        })
+                                }
+                            </select>
                         </div>
                         {
+                            campo_medio_de_pago === "SI" ?
+                                <div className="col-md-3 p-2">
+                                    <label className="form-label"><b>Medio de pago</b></label>
+                                    <select name="medio_pago" className="form-select" value={datos.medio_pago} onChange={handleInputChange} >
+                                        {
+                                            pantalla === "Consultar" || pantalla === "Buscar" ? <option value="">Todos</option>
+                                                :
+                                                ""
+                                        }
+                                        
+                                        <option value="efectivo">Efectivo</option>
+                                        <option value="transferencia">Transferencia</option>
+                                        <option value="pse">PSE</option>
+                                    </select>
+                                </div>
+                                :
+                                ""
+                        }
+                        {
                             pantalla === "Nuevo" || pantalla === "Editar" ?
-                                <div className="col-md-6 p-2">
+                                <div className={extender_observacion}>
                                     <label className="form-label"><b>Observación</b></label>
                                     <input className="form-control" type="text" name="observacion" value={datos.observacion} onChange={handleInputChange} />
                                 </div>
@@ -1112,7 +1186,13 @@ function Pedido() {
                                             <th className="encabezado-detalle">Codigo</th>
                                             <th className="encabezado-detalle">Nombre</th>
                                             <th className="encabezado-detalle">Precio</th>
-                                            <th className="encabezado-detalle">Medida</th>
+                                            {
+                                                unidad_de_medida === "SI" ?
+                                                    <th className="encabezado-detalle">Medida</th>
+                                                    :
+                                                    ""
+                                            }
+
                                             <th className="encabezado-detalle">Cantidad</th>
                                             <th className="encabezado-detalle"></th>
                                         </tr>

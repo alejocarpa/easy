@@ -341,6 +341,8 @@ function Inventario() {
 
             setArray_precios([...array_precios, valor_mas_iva]);
 
+            let td4 = '';
+
             let tbody = document.createElement('tbody');
             let tr = tbody.appendChild(document.createElement('tr'));
             tr.id = 'fila/' + codigo_producto;
@@ -348,19 +350,23 @@ function Inventario() {
             let td2 = tr.appendChild(document.createElement('td'));
             let td3 = tr.appendChild(document.createElement('td'));
             td3.id = 'precio/' + codigo_producto;
-            let td4 = tr.appendChild(document.createElement('td'));
+            if(parametro_fechavencimiento === "SI"){
+                td4 = tr.appendChild(document.createElement('td'));
+            }
             let td5 = tr.appendChild(document.createElement('td'));
             let td6 = tr.appendChild(document.createElement('td'));
             let td7 = tr.appendChild(document.createElement('td'));
 
-            let fechav = td4.appendChild(document.createElement('input'));
-            fechav.type = 'date';
-            fechav.name = 'fechav';
-            fechav.id = 'fechav/' + codigo_producto;
-            fechav.autocomplete = 'off';
-            fechav.value = '0000-00-00';
-            fechav.addEventListener('change', cambiarFechav);
-
+            if(parametro_fechavencimiento === "SI"){
+                let fechav = td4.appendChild(document.createElement('input'));
+                fechav.type = 'date';
+                fechav.name = 'fechav';
+                fechav.id = 'fechav/' + codigo_producto;
+                fechav.autocomplete = 'off';
+                fechav.value = '0000-00-00';
+                fechav.addEventListener('change', cambiarFechav);
+            }
+            
             let lote = td5.appendChild(document.createElement('input'));
             lote.type = 'text';
             lote.name = 'lote';
@@ -640,7 +646,7 @@ function Inventario() {
                         </select>
                     </div>
                     {
-                        datos.transaccion === "T" ?
+                        datos.transaccion === "TR" ?
                             <div className="col-md-3 p-2">
                                 <label className="form-label"><b>Bodega Destino</b></label>
                                 <select name="bodega_destino" className="form-select" value={datos.bodega_destino} onChange={handleInputChange} >
@@ -718,7 +724,7 @@ function Inventario() {
                                         <th className="encabezado-detalle">Nombre</th>
                                         <th className="encabezado-detalle">Costo</th>
                                         {
-                                            parametro_fechavencimiento ?
+                                            parametro_fechavencimiento === "SI" ?
                                                 <th className="encabezado-detalle">Fecha Vencimiento</th>
                                                 :
                                                 ""
