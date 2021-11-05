@@ -132,7 +132,7 @@ function ConsolidadoIventario() {
                         <input type='text' list="datalistOptions" name="producto" className="form-control" value={datos.producto} placeholder="Buscar..." onChange={handleInputChange} />
                         <datalist id="datalistOptions">
                             {!productos ? "Cargando..." : productos.map((producto, index) => {
-                                return <option key={index} value={producto.pro_nombre+'-'+producto.pro_codigo+'-'+producto.pro_codbar}></option>
+                                return <option key={index} value={producto.pro_nombre + '-' + producto.pro_codigo + '-' + producto.pro_codbar}></option>
                             })}
                         </datalist>
                     </div>
@@ -143,24 +143,12 @@ function ConsolidadoIventario() {
                         pantalla === "Consultar" || pantalla === "Buscar" ?
 
                             <div className="col-md-5 m-2">
-                                <button className="btn btn-dark m-2" type="button" name="pantalla" value="Nuevo" onClick={cambiarPantalla} >Nuevo</button>
                                 <button className="btn btn-dark m-2" type="button" name="pantalla" value="Limpiar" onClick={cambiarPantalla} >Limpiar</button>
                                 <button className="btn btn-dark m-2" type="submit" name="pantalla" value="Buscar" onClick={cambiarPantalla} >Buscar</button>
                             </div>
 
-                            : pantalla === "Nuevo" ?
-                                <div className="col-md-5 m-2">
-                                    <button className="btn btn-dark m-2" type="button" name="pantalla" value="Consultar" onClick={cambiarPantalla} >Consultar</button>
-                                    <button className="btn btn-dark m-2" type="button" name="pantalla" value="Limpiar" onClick={cambiarPantalla} >Limpiar</button>
-                                    <button className="btn btn-dark m-2" type="submit" name="pantalla" value="Guardar" onClick={cambiarPantalla} >Guardar</button>
-                                </div>
-
-                                :
-                                <div className="col-md-5 m-2">
-                                    <button className="btn btn-dark m-2" type="button" name="pantalla" value="Consultar" onClick={cambiarPantalla} >Consultar</button>
-                                    <button className="btn btn-dark m-2" type="button" name="pantalla" value="Limpiar" onClick={cambiarPantalla} >Limpiar</button>
-                                    <button className="btn btn-dark m-2" type="submit" name="pantalla" value="Actualizar" onClick={cambiarPantalla} >Actualizar</button>
-                                </div>
+                            :
+                            ""
                     }
 
                 </form>

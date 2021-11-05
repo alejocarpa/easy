@@ -14,13 +14,14 @@ function Grafica_pastel() {
         nombre_producto_1: '',
         cantidad_producto_1: 0,
         nombre_producto_2: '',
-        cantidad_producto_2: 0
+        cantidad_producto_2: 0,
+        nombre_producto_3: '',
+        cantidad_producto_3: 0
     })
 
     useEffect(() => {
         const UrlModulos = `${Dominio}/home/home`;
-        //console.log(UrlModulos);
-        
+
         const pintarGrafica = () => {
             
             axios.post(UrlModulos,  { aut_ip : cookies.get('aut_ip'), aut_bd : cookies.get('aut_bd')  } )
@@ -34,9 +35,11 @@ function Grafica_pastel() {
                 let cantidad1 = 0;
                 let nombre2 = '';
                 let cantidad2 = 0;
+                let nombre3 = '';
+                let cantidad3 = 0;
                 
                 if(responseJSON){
-                    responseJSON.top_3_productos_semana.map((dato, index) => {
+                    responseJSON.top_4_productos_mes.map((dato, index) => {
                         if(index === 0){
                             nombre0 = dato.pro_nombre;
                             cantidad0 = parseInt(dato.cantidad);
@@ -46,6 +49,9 @@ function Grafica_pastel() {
                         }else if(index === 2){
                             nombre2 = dato.pro_nombre;
                             cantidad2 = parseInt(dato.cantidad);
+                        }else if(index === 3){
+                            nombre3 = dato.pro_nombre;
+                            cantidad3 = parseInt(dato.cantidad);
                         }
 
                         return "";
@@ -58,7 +64,9 @@ function Grafica_pastel() {
                     nombre_producto_1: nombre1,
                     cantidad_producto_1: cantidad1,
                     nombre_producto_2: nombre2,
-                    cantidad_producto_2: cantidad2
+                    cantidad_producto_2: cantidad2,
+                    nombre_producto_3: nombre3,
+                    cantidad_producto_3: cantidad3
                 })
                 
             })
@@ -81,9 +89,10 @@ function Grafica_pastel() {
                     [producto.nombre_producto_0, producto.cantidad_producto_0],
                     [producto.nombre_producto_1, producto.cantidad_producto_1],
                     [producto.nombre_producto_2, producto.cantidad_producto_2],
+                    [producto.nombre_producto_3, producto.cantidad_producto_3],
                 ]}
                 options={{
-                    title: 'Top 3 productos de esta semana',
+                    title: 'Top 4 productos de este mes',
                 }}
                 rootProps={{ 'data-testid': '1' }}
             />

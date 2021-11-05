@@ -13,7 +13,8 @@ import ConsolidadoIventario from './componentes/consolidado_inventario/Consolida
 import Empresa from './componentes/empresa/Empresa';
 import Proveedor from './componentes/proveedor/Proveedor';
 import Inventario from './componentes/inventario/inventario';
-
+import Recibocaja from './componentes/recibocaja/Recibocaja';
+import Popupcliente from './componentes/popupcliente/Popupcliente';
 
 function App() {
   return (
@@ -33,6 +34,8 @@ function App() {
           <Route path="/empresa" component={Empresa} />
           <Route path="/proveedor" component={Proveedor} />
           <Route path="/inventario" component={Inventario} />
+          <Route path="/recibo_caja" component={Recibocaja} />
+          <Route path="/popupcliente" component={Popupcliente} />
         </Switch>
       </BrowserRouter>
     </div>

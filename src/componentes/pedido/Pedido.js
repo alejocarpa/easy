@@ -17,7 +17,7 @@ function Pedido() {
     const mesActual = fecha.getMonth() + 1;
     const diaActual = fecha.getDate();
     let extender_observacion = "col-md-6 p-2";
-    
+
     let ceroMes = ''
     if (mesActual < 10) {
         ceroMes = '0';
@@ -48,8 +48,8 @@ function Pedido() {
     const [devuelta, setDevuelta] = useState('');
     const [verDetalle, setVerDetalle] = useState([]);
 
-    if(campo_medio_de_pago === "SI"){
-        extender_observacion="col-md-3 p-2";
+    if (campo_medio_de_pago === "SI") {
+        extender_observacion = "col-md-3 p-2";
     }
 
     const UrlModulos = `${Dominio}/pedido/pedido`;
@@ -306,6 +306,17 @@ function Pedido() {
                 efectivo: 0,
                 medio_pago: 'efectivo'
             })
+
+            const UrlHome = `${Dominio}/home/home`;
+            axios.post(UrlHome, { aut_ip: cookies.get('aut_ip'), aut_bd: cookies.get('aut_bd') })
+                .then(response => {
+                    const responseJSON = response.data;
+                    //console.log(responseJSON);
+
+                    const top_4_productos_mes = responseJSON.top_4_productos_mes;
+                    setcarProducto(<CardProducto resultado={top_4_productos_mes} agregar={agregar} />);
+
+                })
         }
 
         if (e.target.value === "Limpiar" || e.target.value === "Consultar") {
@@ -1093,7 +1104,7 @@ function Pedido() {
                                                 :
                                                 ""
                                         }
-                                        
+
                                         <option value="efectivo">Efectivo</option>
                                         <option value="transferencia">Transferencia</option>
                                         <option value="pse">PSE</option>
@@ -1261,7 +1272,7 @@ function Pedido() {
             </div>
             <hr className="my-4" />
             <br />
-            {pantalla === "Buscar" ? <Detalle respuesta_json={detalle} editar={editar} pag={paginado} anular={anular} ver={ver_detalle} /> : ""}
+            {pantalla === "Buscar" ? <Detalle respuesta_json={detalle} editar={editar} pag={paginado} anular={anular} ver={ver_detalle} campo_medio_de_pago={campo_medio_de_pago} /> : ""}
         </div>
     )
 }
