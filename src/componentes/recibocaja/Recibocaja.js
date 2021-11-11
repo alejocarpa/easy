@@ -197,6 +197,14 @@ function Recibocaja() {
 	   	miPopup.focus();
     }
 
+    const codigoCliente = (e) => {
+        console.log("aqui");
+        setDatos({
+            ...datos,
+            cliente: document.getElementById('cliente').value
+        })
+    }
+
     return (
         <div className="container-completo">
             <Menu />
@@ -213,7 +221,7 @@ function Recibocaja() {
                     }
                     <div className="col-md-3 p-2 logo-busqueda">
                         <label className="form-label"><b>Cliente</b></label>
-                        <input className="form-control" type="text" name="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} />
+                        <input className="form-control" type="text" name="cliente" id="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} onFocus={() => {codigoCliente();}} />
                         <i className="fas fa-search" onClick={winCliente}></i>
                     </div>
                     {pantalla !== "Nuevo" ?

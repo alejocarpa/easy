@@ -33,7 +33,6 @@ function Pedido() {
     const [bloquea, setBloquea] = useState(false);
     const [obligatorio, setObligatorio] = useState(false);
     const [detalle, setDetalle] = useState([]);
-    const [clientes, setClientes] = useState([]);
     const [asesores, setAsesores] = useState([]);
     const [carProducto, setcarProducto] = useState();
     const [codigo_cliente_automatico, setCodigo_cliente_automatico] = useState('NO');
@@ -959,6 +958,19 @@ function Pedido() {
         window.scrollTo(0, 400);
     }
 
+    const winCliente = () => {
+        let miPopup = window.open('../popupcliente/', "popupId", "location=no,menubar=no,titlebar=no,resizable=no,toolbar=no, menubar=no,width=800,height=500,left=250,top=100");
+	   	miPopup.focus();
+    }
+
+    const codigoCliente = (e) => {
+        console.log("aqui");
+        setDatos({
+            ...datos,
+            cliente: document.getElementById('cliente').value
+        })
+    }
+
     useEffect(() => {
         let recibido = datos.efectivo;
         let total_devuelta = recibido - valor_total;
@@ -978,22 +990,6 @@ function Pedido() {
     }, [datos.descuento, valor_total])
 
     useEffect(() => {
-        const UrlClientes = `${Dominio}/cliente/cliente`;
-
-        const obtenerClientes = async () => {
-            await axios.post(UrlClientes, {
-                aut_ip: cookies.get('aut_ip'),
-                aut_bd: cookies.get('aut_bd'),
-                metodo: 'Buscar',
-                limite: 'NO',
-            })
-                .then(response => {
-                    const respuesta = response.data;
-                    //console.log(respuesta);
-                    setClientes(respuesta.result)
-                })
-        }
-        obtenerClientes();
 
         const UrlAsesores = `${Dominio}/asesor/asesor`;
 
@@ -1059,7 +1055,7 @@ function Pedido() {
             <div className="container mt-3">
                 <h1>{pantalla} Pedido</h1>
                 {pantalla !== "VerDetalle" ?
-                    <form className="row mt-3" onSubmit={enviarDatos} >
+                    <form name="formul" className="row mt-3" onSubmit={enviarDatos} >
                         {
                             pantalla !== "Nuevo" && pantalla !== "Editar" ?
                                 <div className="col-md-3 p-2">
@@ -1068,14 +1064,10 @@ function Pedido() {
                                 </div>
                                 : ""
                         }
-                        <div className="col-md-3 p-2">
+                        <div className="col-md-3 p-2 logo-busqueda">
                             <label className="form-label"><b>Cliente</b></label>
-                            <input className="form-control" type="text" list="datalistOptions" name="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} />
-                            <datalist id="datalistOptions">
-                                {!clientes ? "Cargando..." : clientes.map((cliente, index) => {
-                                    return <option key={index} value={cliente.cli_codigo + '-' + cliente.cli_nombre1 + ' ' + cliente.cli_apelli1 + '-' + cliente.cli_docume}></option>
-                                })}
-                            </datalist>
+                            <input className="form-control" type="text" list="datalistOptions" name="cliente" id="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} onFocus={() => {codigoCliente();}} />
+                            <i className="fas fa-search" onClick={winCliente}></i>
                         </div>
                         <div className="col-md-3 p-2">
                             <label className="form-label"><b>Asesor</b></label>

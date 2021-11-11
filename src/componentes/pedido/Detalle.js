@@ -78,7 +78,7 @@ function Detalle(props) {
                                 }
                                 <td className="align-middle">{pedido.ped_observ}</td>
                                 <td className="align-middle">{pedido.ped_estado === "Pendiente" ? <button className="btn btn-primary" onClick={() => props.editar(pedido.ped_codigo)}>Editar</button> : ""}</td>
-                                <td>{pedido.ped_estado === "Pendiente" ? <button className="btn btn-primary" onClick={() => props.anular(pedido.ped_codigo)}>Anular</button> : ""}</td>
+                                <td className="align-middle">{pedido.ped_estado === "Pendiente" ? <button className="btn btn-primary" onClick={() => props.anular(pedido.ped_codigo)}>Anular</button> : ""}</td>
                             </tr>
 
                         })}

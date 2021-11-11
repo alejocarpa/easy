@@ -25,6 +25,39 @@ function Popupcliente() {
             ...datos,
             [event.target.name]: event.target.value
         })
+        let codigo = '';
+        let nombre = '';
+        let apellido = '';
+        let documento = '';
+
+        if(event.target.name === "codigo"){
+            codigo = event.target.value;
+        }
+        if(event.target.name === "nombre"){
+            nombre = event.target.value;
+        }
+        if(event.target.name === "apellido"){
+            apellido = event.target.value;
+        }
+        if(event.target.name === "documento"){
+            documento = event.target.value;
+        }
+        axios.post(UrlModulos, {
+            aut_ip: cookies.get('aut_ip'),
+            aut_bd: cookies.get('aut_bd'),
+            metodo: pantalla,
+            cli_codigo: codigo,
+            cli_nombre1: nombre,
+            cli_apelli1: apellido,
+            cli_docume: documento,
+            limite: 'SI'
+        })
+            .then(response => {
+
+                const responseJSON = response.data;
+                //console.log(responseJSON);
+                setDetalle(responseJSON);
+            })
     }
 
     const enviarDatos = async (event) => {
@@ -71,6 +104,7 @@ function Popupcliente() {
     const enviar = (codigo,nombre,apellido) => {
         //alert("editar "+codigo);
         window.opener.document.formul.cliente.value = codigo+"-"+nombre+" "+apellido;
+        window.opener.document.formul.cliente.focus();
         window.close();
     }
 
