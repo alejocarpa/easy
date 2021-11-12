@@ -5,6 +5,7 @@ function Detalle(props) {
     const campo_medio_de_pago = props.campo_medio_de_pago;
     //console.log(resultado);
     const [anchoVentana, setAnchoVentana] = useState(window.innerWidth);
+    const [total_sin_iva, setTotal_sin_iva] = useState(0);
 
     useEffect(() => {
         const handleResize = () => setAnchoVentana(window.innerWidth)
@@ -59,6 +60,7 @@ function Detalle(props) {
                     </thead>
 
                     <tbody>
+                        
                         {!resultado.result ? <tr><td>cargando...</td></tr> : resultado.result.map((pedido, index) => {
                             return <tr key={index}>
                                 <td className="align-middle"><button className="btn btn-primary" name="verdetalle" onClick={() => props.ver(pedido.ped_codigo)} >Ver detalle</button></td>
@@ -80,8 +82,21 @@ function Detalle(props) {
                                 <td className="align-middle">{pedido.ped_estado === "Pendiente" ? <button className="btn btn-primary" onClick={() => props.editar(pedido.ped_codigo)}>Editar</button> : ""}</td>
                                 <td className="align-middle">{pedido.ped_estado === "Pendiente" ? <button className="btn btn-primary" onClick={() => props.anular(pedido.ped_codigo)}>Anular</button> : ""}</td>
                             </tr>
-
                         })}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>Total</b></td>
+                            <td className="text-end align-middle"><b>${total_sin_iva}</b></td>
+                            <td className="text-end align-middle"><b>${total_sin_iva}</b></td>
+                            <td className="text-end align-middle"><b>${total_sin_iva}</b></td>
+                            <td className="text-end align-middle"><b>${total_sin_iva}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
 

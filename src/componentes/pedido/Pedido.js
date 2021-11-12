@@ -328,6 +328,14 @@ function Pedido() {
                 medio_pago: ''
             })
 
+            setArray_productos([]);
+            setArray_cantidades([]);
+            setArray_medidas([]);
+            setArray_precios([]);
+            setArray_nombres([]);
+            setValor_total(0);
+            setDevuelta('');
+
             if (e.target.value === "Limpiar") {
                 setPantalla("Consultar");
             }
@@ -773,6 +781,36 @@ function Pedido() {
         setValor_total(total_mas_iva);
     }
 
+    const cargarProductoPopup = () => {
+
+        let codigo_producto = document.getElementById('codigo_del_producto').value;
+        if (codigo_producto) {
+            const UrlProducto = `${Dominio}/producto/producto`;
+
+            axios.post(UrlProducto, {
+                aut_ip: cookies.get('aut_ip'),
+                aut_bd: cookies.get('aut_bd'),
+                metodo: 'Buscar',
+                pro_codigo: codigo_producto,
+                card_producto: 'SI'
+            })
+                .then(response => {
+                    const responseJSON = response.data.result;
+                    //console.log('resultado'+responseJSON.length);
+                    if (responseJSON.length === 1) {
+                        responseJSON.map((producto) => {
+                            agregar(producto.pro_codigo, producto.pro_costo, producto.pro_iva, producto.pro_nombre)
+                        });
+                        setDatos({
+                            ...datos,
+                            pro_codbar: ''
+                        })
+                    }
+
+                })
+        }
+    }
+
     const cambiarCantidad = (event) => {
 
         //alert(event.target.value);
@@ -960,15 +998,19 @@ function Pedido() {
 
     const winCliente = () => {
         let miPopup = window.open('../popupcliente/', "popupId", "location=no,menubar=no,titlebar=no,resizable=no,toolbar=no, menubar=no,width=800,height=500,left=250,top=100");
-	   	miPopup.focus();
+        miPopup.focus();
     }
 
     const codigoCliente = (e) => {
-        console.log("aqui");
         setDatos({
             ...datos,
             cliente: document.getElementById('cliente').value
         })
+    }
+
+    const winProducto = () => {
+        let miPopup = window.open('../popupproducto/', "popupId", "location=no,menubar=no,titlebar=no,resizable=no,toolbar=no, menubar=no,width=800,height=500,left=250,top=100");
+        miPopup.focus();
     }
 
     useEffect(() => {
@@ -1066,7 +1108,7 @@ function Pedido() {
                         }
                         <div className="col-md-3 p-2 logo-busqueda">
                             <label className="form-label"><b>Cliente</b></label>
-                            <input className="form-control" type="text" list="datalistOptions" name="cliente" id="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} onFocus={() => {codigoCliente();}} />
+                            <input className="form-control" type="text" list="datalistOptions" name="cliente" id="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} onFocus={() => { codigoCliente(); }} />
                             <i className="fas fa-search" onClick={winCliente}></i>
                         </div>
                         <div className="col-md-3 p-2">
@@ -1176,32 +1218,39 @@ function Pedido() {
                                     <label className="form-label"><b>Nombre</b></label>
                                     <input type='text' name="pro_nombre" placeholder="Buscar..." className="form-control" value={datos.pro_nombre} onChange={BuscarNombre} autoComplete="off" />
                                 </div>
-                                <div className="col-md-3 p-2">
+                                <div className="col-md-3 p-2 logo-busqueda">
                                     <label className="form-label"><b>Codigo de barras</b></label>
-                                    <input type='text' name="pro_codbar" className="form-control" placeholder="Buscar..." value={datos.pro_codbar} onChange={BuscarCodigoBarras} autoFocus />
+                                    <input type='text' name="pro_codbar" className="form-control" placeholder="Buscar..." value={datos.pro_codbar} onChange={BuscarCodigoBarras} onFocus={cargarProductoPopup} autoFocus />
+                                    <i className="fas fa-search" onClick={winProducto}></i>
+                                </div>
+                                <div className="col-md-3 p-2">
+                                    <input type='hidden' name="codigo_del_producto" id="codigo_del_producto" className="form-control" value="" />
                                 </div>
 
                                 <div id="cardproducto">{carProducto}</div>
 
-                                <table className="table table-dark table-hover" id="lista">
-                                    <thead>
-                                        <tr>
-                                            <th className="encabezado-detalle">Codigo</th>
-                                            <th className="encabezado-detalle">Nombre</th>
-                                            <th className="encabezado-detalle">Precio</th>
-                                            {
-                                                unidad_de_medida === "SI" ?
-                                                    <th className="encabezado-detalle">Medida</th>
-                                                    :
-                                                    ""
-                                            }
+                                <div className="table-responsive">
+                                    <table className="table table-dark table-hover" id="lista">
+                                        <thead>
+                                            <tr>
+                                                <th className="encabezado-detalle">Codigo</th>
+                                                <th className="encabezado-detalle">Nombre</th>
+                                                <th className="encabezado-detalle">Precio</th>
+                                                {
+                                                    unidad_de_medida === "SI" ?
+                                                        <th className="encabezado-detalle">Medida</th>
+                                                        :
+                                                        ""
+                                                }
 
-                                            <th className="encabezado-detalle">Cantidad</th>
-                                            <th className="encabezado-detalle"></th>
-                                        </tr>
-                                    </thead>
+                                                <th className="encabezado-detalle">Cantidad</th>
+                                                <th className="encabezado-detalle"></th>
+                                            </tr>
+                                        </thead>
 
-                                </table>
+                                    </table>
+                                </div>
+
                                 <input type="hidden" id="carrito" value={array_productos}></input>
                                 <input type="hidden" id="cantidad_carrito" value={array_cantidades}></input>
                                 <input type="hidden" id="medida_carrito" value={array_medidas}></input>

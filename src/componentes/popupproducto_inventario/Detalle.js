@@ -48,12 +48,10 @@ function Detalle(props) {
                             <h4 className="mb-1">{producto.pro_nombre}</h4>
                         </div>
                         <p className="mb-1"><b>Codigo</b>: {producto.pro_codigo}</p>
-                        <p className="mb-1"><b>Valor</b>: ${new Intl.NumberFormat("de-DE").format(Math.round(producto.pro_costo))}</p>
+                        <p className="mb-1"><b>Costo</b>: ${new Intl.NumberFormat("de-DE").format(Math.round(producto.pro_compra))}</p>
                         {
                             precio_x_tipounidad_winproducto === "SI" ?
                                 <>
-                                    <p className="mb-1"><b>Valor Blister</b>: ${new Intl.NumberFormat("de-DE").format(Math.round(producto.pro_precio2))}</p>
-                                    <p className="mb-1"><b>Valor Caja</b>: ${new Intl.NumberFormat("de-DE").format(Math.round(producto.ped_pro_precio3))}</p>
                                     <p className="mb-1"><b>Laboratorio</b>: {producto.gru_nombre}</p>
                                 </>
                                 :

@@ -16,6 +16,7 @@ import Inventario from './componentes/inventario/inventario';
 import Recibocaja from './componentes/recibocaja/Recibocaja';
 import Popupcliente from './componentes/popupcliente/Popupcliente';
 import Popupproducto from './componentes/popupproducto/Popupproducto';
+import Popupproducto_inventario from './componentes/popupproducto_inventario/Popupproducto';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/recibo_caja" component={Recibocaja} />
           <Route path="/popupcliente" component={Popupcliente} />
           <Route path="/popupproducto" component={Popupproducto} />
+          <Route path="/popupproducto_inventario" component={Popupproducto_inventario} />
         </Switch>
       </BrowserRouter>
     </div>

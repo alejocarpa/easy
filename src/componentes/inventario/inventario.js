@@ -350,14 +350,14 @@ function Inventario() {
             let td2 = tr.appendChild(document.createElement('td'));
             let td3 = tr.appendChild(document.createElement('td'));
             td3.id = 'precio/' + codigo_producto;
-            if(parametro_fechavencimiento === "SI"){
+            if (parametro_fechavencimiento === "SI") {
                 td4 = tr.appendChild(document.createElement('td'));
             }
             let td5 = tr.appendChild(document.createElement('td'));
             let td6 = tr.appendChild(document.createElement('td'));
             let td7 = tr.appendChild(document.createElement('td'));
 
-            if(parametro_fechavencimiento === "SI"){
+            if (parametro_fechavencimiento === "SI") {
                 let fechav = td4.appendChild(document.createElement('input'));
                 fechav.type = 'date';
                 fechav.name = 'fechav';
@@ -366,7 +366,7 @@ function Inventario() {
                 fechav.value = '0000-00-00';
                 fechav.addEventListener('change', cambiarFechav);
             }
-            
+
             let lote = td5.appendChild(document.createElement('input'));
             lote.type = 'text';
             lote.name = 'lote';
@@ -544,6 +544,41 @@ function Inventario() {
         padre.removeChild(tr);
     }
 
+    const winProducto = () => {
+        let miPopup = window.open('../popupproducto_inventario/', "popupId", "location=no,menubar=no,titlebar=no,resizable=no,toolbar=no, menubar=no,width=800,height=500,left=250,top=100");
+        miPopup.focus();
+    }
+
+    const cargarProductoPopup = () => {
+
+        let codigo_producto = document.getElementById('codigo_del_producto').value;
+        if (codigo_producto) {
+            const UrlProducto = `${Dominio}/producto/producto`;
+
+            axios.post(UrlProducto, {
+                aut_ip: cookies.get('aut_ip'),
+                aut_bd: cookies.get('aut_bd'),
+                metodo: 'Buscar',
+                pro_codigo: codigo_producto,
+                card_producto: 'SI'
+            })
+                .then(response => {
+                    const responseJSON = response.data.result;
+                    //console.log('resultado'+responseJSON.length);
+                    if (responseJSON.length === 1) {
+                        responseJSON.map((producto) => {
+                            agregar(producto.pro_codigo, producto.pro_compra, producto.pro_iva, producto.pro_nombre)
+                        });
+                        setDatos({
+                            ...datos,
+                            pro_codbar: ''
+                        })
+                    }
+
+                })
+        }
+    }
+
     useEffect(() => {
         const obtenerBodega = async () => {
             const UrlBodegas = `${Dominio}/bodega/bodega`;
@@ -606,7 +641,7 @@ function Inventario() {
             <Menu />
             <div className="container mt-3">
                 <h1>{pantalla} Movimiento</h1>
-                <form className="row mt-3" onSubmit={enviarDatos}  >
+                <form name="formul" className="row mt-3" onSubmit={enviarDatos}  >
                     {
                         pantalla !== "Nuevo" ?
                             <div className="col-md-3 p-2">
@@ -710,32 +745,38 @@ function Inventario() {
                                 <label className="form-label"><b>Nombre</b></label>
                                 <input type='text' name="pro_nombre" placeholder="Buscar..." className="form-control" value={datos.pro_nombre} onChange={BuscarNombre} autoComplete="off" />
                             </div>
-                            <div className="col-md-3 p-2">
+                            <div className="col-md-3 p-2 logo-busqueda">
                                 <label className="form-label"><b>Codigo de barras</b></label>
-                                <input type='text' name="pro_codbar" className="form-control" placeholder="Buscar..." value={datos.pro_codbar} onChange={BuscarCodigoBarras} autoFocus />
+                                <input type='text' name="pro_codbar" className="form-control" placeholder="Buscar..." value={datos.pro_codbar} onChange={BuscarCodigoBarras} onFocus={cargarProductoPopup} autoFocus />
+                                <i className="fas fa-search" onClick={winProducto}></i>
+                            </div>
+                            <div className="col-md-3 p-2">
+                                <input type='hidden' name="codigo_del_producto" id="codigo_del_producto" className="form-control" value="" />
                             </div>
 
                             <div id="cardproducto">{carProducto}</div>
 
-                            <table className="table table-dark table-hover" id="lista">
-                                <thead>
-                                    <tr>
-                                        <th className="encabezado-detalle">Codigo</th>
-                                        <th className="encabezado-detalle">Nombre</th>
-                                        <th className="encabezado-detalle">Costo</th>
-                                        {
-                                            parametro_fechavencimiento === "SI" ?
-                                                <th className="encabezado-detalle">Fecha Vencimiento</th>
-                                                :
-                                                ""
-                                        }
-                                        <th className="encabezado-detalle">Lote</th>
-                                        <th className="encabezado-detalle">Cantidad (Unidad)</th>
-                                        <th className="encabezado-detalle"></th>
-                                    </tr>
-                                </thead>
+                            <div className="table-responsive">
+                                <table className="table table-dark table-hover" id="lista">
+                                    <thead>
+                                        <tr>
+                                            <th className="encabezado-detalle">Codigo</th>
+                                            <th className="encabezado-detalle">Nombre</th>
+                                            <th className="encabezado-detalle">Costo</th>
+                                            {
+                                                parametro_fechavencimiento === "SI" ?
+                                                    <th className="encabezado-detalle">Fecha Vencimiento</th>
+                                                    :
+                                                    ""
+                                            }
+                                            <th className="encabezado-detalle">Lote</th>
+                                            <th className="encabezado-detalle">Cantidad (Unidad)</th>
+                                            <th className="encabezado-detalle"></th>
+                                        </tr>
+                                    </thead>
 
-                            </table>
+                                </table>
+                            </div>
                             <input type="hidden" id="carrito" value={array_productos}></input>
                             <input type="hidden" id="cantidad_carrito" value={array_cantidades}></input>
                             <input type="hidden" id="precio_carrito" value={array_precios}></input>
