@@ -10,17 +10,37 @@ const cookies = new Cookies();
 
 function Recibocaja() {
 
+    const fecha = new Date();
+    const añoActual = fecha.getFullYear();
+    const mesActual = fecha.getMonth() + 1;
+    const diaActual = fecha.getDate();
+
+    let ceroMes = ''
+    if (mesActual < 10) {
+        ceroMes = '0';
+    }
+    let ceroDia = ''
+    if (diaActual < 10) {
+        ceroDia = '0';
+    }
+    const fechaActual = añoActual + '-' + ceroMes + '' + mesActual + '-' + ceroDia + '' + diaActual;
+    const fechaDesde = añoActual + '-' + ceroMes + '' + mesActual + '-' + '01';
+
     const [pantalla, setPantalla] = useState('Consultar');
     const [bloquea, setBloquea] = useState(false);
     const [obligatorio, setObligatorio] = useState(false);
     const [detalle, setDetalle] = useState([]);
-    const [clientes, setClientes] = useState([]);
+    const [asesores, setAsesores] = useState([]);
     const UrlModulos = `${Dominio}/laboratorio/laboratorio`;
 
     const [datos, setDatos] = useState({
         codigo: '',
         cliente: '',
-        estado: ''
+        factura: '',
+        asesor: '',
+        estado: '',
+        fecha1: fechaDesde,
+        fecha2: fechaActual
     });
 
     const handleInputChange = (event) => {
@@ -127,27 +147,29 @@ function Recibocaja() {
         //alert(e.target.value);
         setPantalla(e.target.value);
 
-        if (e.target.value === "Actualizar") {
-            if (datos.nombre === "") {
-                setBloquea(true);
-                setObligatorio(true);
-                setPantalla("Editar");
-            }
-        }
-
-        if (e.target.value === "Guardar" || e.target.value === "Nuevo") {
-            if (datos.nombre === "") {
-                setObligatorio(true);
-                setPantalla("Nuevo");
-            }
-        }
-
-        if (e.target.value === "Nuevo" || e.target.value === "Limpiar" || e.target.value === "Consultar") {
+        if (e.target.value === "Consultar") {
             setDatos({
                 ...datos,
                 codigo: '',
-                nombre: '',
+                cliente: '',
+                factura: '',
+                asesor: '',
                 estado: '',
+                fecha1: fechaDesde,
+                fecha2: fechaActual
+            })
+        }
+
+        if (e.target.value === "Nuevo" || e.target.value === "Limpiar") {
+            setDatos({
+                ...datos,
+                codigo: '',
+                cliente: '',
+                factura: '',
+                asesor: '',
+                estado: '',
+                fecha1: '',
+                fecha2: ''
             })
 
             if (e.target.value === "Limpiar") {
@@ -194,7 +216,7 @@ function Recibocaja() {
 
     const winCliente = () => {
         let miPopup = window.open('../popupcliente/', "popupId", "location=no,menubar=no,titlebar=no,resizable=no,toolbar=no, menubar=no,width=800,height=500,left=250,top=100");
-	   	miPopup.focus();
+        miPopup.focus();
     }
 
     const codigoCliente = (e) => {
@@ -204,6 +226,34 @@ function Recibocaja() {
             cliente: document.getElementById('cliente').value
         })
     }
+
+    useEffect(() => {
+        const UrlAsesores = `${Dominio}/asesor/asesor`;
+
+        const obtenerAsesores = async () => {
+            let codigo_asesor = '';
+            if (cookies.get('aut_asesor') !== "null") {
+                codigo_asesor = cookies.get('aut_asesor');
+            }
+            await axios.post(UrlAsesores, {
+                aut_ip: cookies.get('aut_ip'),
+                aut_bd: cookies.get('aut_bd'),
+                ase_codigo: codigo_asesor,
+                metodo: 'Buscar',
+                limite: 'NO'
+            })
+                .then(response => {
+                    const respuesta = response.data;
+                    //console.log(respuesta);
+                    setAsesores(respuesta.result);
+                    setDatos({
+                        ...datos,
+                        asesor: codigo_asesor
+                    })
+                })
+        }
+        obtenerAsesores();
+    }, []);
 
     return (
         <div className="container-completo">
@@ -221,20 +271,48 @@ function Recibocaja() {
                     }
                     <div className="col-md-3 p-2 logo-busqueda">
                         <label className="form-label"><b>Cliente</b></label>
-                        <input className="form-control" type="text" name="cliente" id="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} onFocus={() => {codigoCliente();}} />
+                        <input className="form-control" type="text" name="cliente" id="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} onFocus={() => { codigoCliente(); }} />
                         <i className="fas fa-search" onClick={winCliente}></i>
                     </div>
-                    {pantalla !== "Nuevo" ?
+                    <div className="col-md-3 p-2">
+                        <label className="form-label"><b>Factura</b></label>
+                        <input className="form-control" type="text" name="factura" value={datos.factura} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-3 p-2">
+                        <label className="form-label"><b>Asesor</b></label>
+                        <select name="asesor" className="form-select" value={datos.asesor} onChange={handleInputChange} >
+                            <option value="">Todos</option>
+                            {
+                                !asesores ? "Cargando..."
+                                    :
+                                    asesores.map((asesor, index) => {
+                                        return <option key={index} value={asesor.ase_codigo}>{asesor.ase_codigo + '-' + asesor.ase_nombre}</option>
+                                    })
+                            }
+                        </select>
+                    </div>
+                    {
+                        pantalla !== "Nuevo" ?
 
-                        <div className="col-md-3 p-2">
-                            <label className="form-label"><b>Estado</b></label>
-                            <select name="estado" className="form-select" value={datos.estado} onChange={handleInputChange} >
-                                <option value="">Todos</option>
-                                <option value="A">Activo</option>
-                                <option value="I">Inactivo</option>
-                            </select>
-                        </div>
-                        : ""}
+                            <div className="col-md-3 p-2">
+                                <label className="form-label"><b>Estado</b></label>
+                                <select name="estado" className="form-select" value={datos.estado} onChange={handleInputChange} >
+                                    <option value="">Todos</option>
+                                    <option value="P">Pagado</option>
+                                    <option value="A">Anulado</option>
+                                </select>
+                            </div>
+                            :
+                            ""
+                    }
+                    <div className="col-md-3 p-2">
+                        <label className="form-label"><b>Fecha Desde</b></label>
+                        <input type="date" name="fecha1" className="form-control" value={datos.fecha1} onChange={handleInputChange}></input>
+                    </div>
+                    <div className="col-md-3 p-2">
+                        <label className="form-label"><b>Hasta</b></label>
+                        <input type="date" name="fecha2" className="form-control" value={datos.fecha2} onChange={handleInputChange}></input>
+                    </div>
 
                     <hr className="my-4" />
 
@@ -258,7 +336,6 @@ function Recibocaja() {
                                 <div className="col-md-5 m-2">
                                     <button className="btn btn-dark m-2" type="button" name="pantalla" value="Consultar" onClick={cambiarPantalla} >Consultar</button>
                                     <button className="btn btn-dark m-2" type="button" name="pantalla" value="Limpiar" onClick={cambiarPantalla} >Limpiar</button>
-                                    <button className="btn btn-dark m-2" type="submit" name="pantalla" value="Actualizar" onClick={cambiarPantalla} >Actualizar</button>
                                 </div>
                     }
 

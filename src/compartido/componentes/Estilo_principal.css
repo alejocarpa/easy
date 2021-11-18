@@ -29,8 +29,20 @@
     cursor: pointer;
 }
 
+.logo-busqueda-producto i{
+    position:relative;
+    top: -30px;
+    left: 235px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1115px) {
     .logo-busqueda i{
+        left: 190px;
+    }
+
+    .logo-busqueda-producto i{
         left: 190px;
     }
 }
@@ -39,16 +51,29 @@
     .logo-busqueda i{
         left: 130px;
     }
+
+    .logo-busqueda-producto i{
+        left: 130px;
+    }
 }
 
 @media screen and (max-width: 768px) {
     .logo-busqueda i{
         left: 490px;
     }
+
+    .logo-busqueda-producto i{
+        left: 470px;
+    }
 }
 
 @media screen and (max-width: 575px) {
     .logo-busqueda i{
+        left: 10px;
+        top: 8px;
+    }
+
+    .logo-busqueda-producto i{
         left: 10px;
         top: 8px;
     }

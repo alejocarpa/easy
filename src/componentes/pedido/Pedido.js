@@ -1218,7 +1218,7 @@ function Pedido() {
                                     <label className="form-label"><b>Nombre</b></label>
                                     <input type='text' name="pro_nombre" placeholder="Buscar..." className="form-control" value={datos.pro_nombre} onChange={BuscarNombre} autoComplete="off" />
                                 </div>
-                                <div className="col-md-3 p-2 logo-busqueda">
+                                <div className="col-md-3 p-2 logo-busqueda-producto">
                                     <label className="form-label"><b>Codigo de barras</b></label>
                                     <input type='text' name="pro_codbar" className="form-control" placeholder="Buscar..." value={datos.pro_codbar} onChange={BuscarCodigoBarras} onFocus={cargarProductoPopup} autoFocus />
                                     <i className="fas fa-search" onClick={winProducto}></i>
