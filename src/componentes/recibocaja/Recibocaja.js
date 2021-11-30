@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Menu from '../menu/Menu';
 import Detalle from './Detalle';
+import DetalleCartera from './DetalleCartera';
 import './../../compartido/componentes/Estilo_principal.css';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
@@ -31,14 +32,15 @@ function Recibocaja() {
     const [obligatorio, setObligatorio] = useState(false);
     const [detalle, setDetalle] = useState([]);
     const [asesores, setAsesores] = useState([]);
-    const UrlModulos = `${Dominio}/laboratorio/laboratorio`;
+    const [cartera, setCartera] = useState([]);
+    const UrlModulos = `${Dominio}/recibocaja/recibocaja`;
 
     const [datos, setDatos] = useState({
         codigo: '',
         cliente: '',
         factura: '',
         asesor: '',
-        estado: '',
+        estado: 'P',
         fecha1: fechaDesde,
         fecha2: fechaActual
     });
@@ -59,9 +61,13 @@ function Recibocaja() {
                 aut_ip: cookies.get('aut_ip'),
                 aut_bd: cookies.get('aut_bd'),
                 metodo: pantalla,
-                gru_codigo: datos.codigo,
-                gru_nombre: datos.nombre,
-                gru_estado: datos.estado,
+                rec_codigo: datos.codigo,
+                rec_client: datos.cliente,
+                rec_asesor: datos.asesor,
+                rec_factur: datos.factura,
+                rec_estado: datos.estado,
+                fecha1: datos.fecha1,
+                fecha2: datos.fecha2,
                 limite: 'SI'
             })
                 .then(response => {
@@ -71,6 +77,26 @@ function Recibocaja() {
                     setDetalle(responseJSON);
                     window.scrollTo(0, 400);
                 })
+        } else if (pantalla === "Buscar Cartera") {
+            await axios.post(UrlModulos, {
+                aut_ip: cookies.get('aut_ip'),
+                aut_bd: cookies.get('aut_bd'),
+                metodo: pantalla,
+                rec_client: datos.cliente,
+                rec_asesor: datos.asesor,
+                rec_factur: datos.factura,
+                fecha1: datos.fecha1,
+                fecha2: datos.fecha2,
+                limite: 'SI'
+            })
+                .then(response => {
+                    //console.log(response.data);
+                    const responseJSON = response.data;
+
+                    setCartera(responseJSON);
+                    window.scrollTo(0, 400);
+                })
+
         } else if (pantalla === "Guardar") {
             await axios.post(UrlModulos, {
                 aut_ip: cookies.get('aut_ip'),
@@ -99,35 +125,6 @@ function Recibocaja() {
             setObligatorio(false);
 
 
-        } else if (pantalla === "Actualizar") {
-
-            await axios.put(UrlModulos, {
-                aut_ip: cookies.get('aut_ip'),
-                aut_bd: cookies.get('aut_bd'),
-                metodo: pantalla,
-                gru_codigo: datos.codigo,
-                gru_nombre: datos.nombre,
-                gru_estado: datos.estado,
-            })
-                .then(response => {
-                    //console.log(response.data);
-                    const responseJSON = response.data;
-                    alert('Se actualizo correctamente el laboratorio');
-
-                    if (responseJSON) {
-                        setDatos({
-                            ...datos,
-                            codigo: '',
-                            nombre: '',
-                            estado: ''
-                        })
-                    }
-
-                    setPantalla("Consultar");
-                })
-
-            setObligatorio(false);
-
         }
         setBloquea(false);
     }
@@ -154,7 +151,7 @@ function Recibocaja() {
                 cliente: '',
                 factura: '',
                 asesor: '',
-                estado: '',
+                estado: 'P',
                 fecha1: fechaDesde,
                 fecha2: fechaActual
             })
@@ -176,42 +173,41 @@ function Recibocaja() {
                 setPantalla("Consultar");
             }
 
-            if (e.target.value === "Consultar") {
-                setObligatorio(false);
-                setBloquea(false);
-            }
-
         }
 
 
     }
 
-    const editar = async (codigo) => {
-        //alert("editar "+codigo);
-        setPantalla("Editar");
-        setBloquea(true);
-        setObligatorio(true);
-
-        await axios.post(UrlModulos, {
-            aut_ip: cookies.get('aut_ip'),
-            aut_bd: cookies.get('aut_bd'),
-            metodo: 'Editar',
-            gru_codigo: codigo
-        })
-            .then(response => {
-                const respuesta = response.data;
-                //console.log(respuesta);
-                respuesta.result.map((dato, index) => {
-                    return <div key={index}>
-                        {setDatos({
-                            ...datos,
-                            codigo: dato.gru_codigo,
-                            nombre: dato.gru_nombre,
-                            estado: dato.gru_estado
-                        })}
-                    </div>
-                })
+    const anular = async (codigo, factura) => {
+        if (window.confirm("Desea anular el recibo de caja " + codigo + " ?")) {
+            await axios.put(UrlModulos, {
+                aut_ip: cookies.get('aut_ip'),
+                aut_bd: cookies.get('aut_bd'),
+                metodo: 'Anular',
+                rec_codigo: codigo,
+                rec_factur: factura
             })
+                .then(response => {
+                    //console.log(response.data);
+                    const responseJSON = response.data;
+                    alert(responseJSON.mensaje);
+
+                    if (responseJSON) {
+                        setDatos({
+                            ...datos,
+                            codigo: '',
+                            cliente: '',
+                            factura: '',
+                            asesor: '',
+                            estado: 'P',
+                            fecha1: fechaDesde,
+                            fecha2: fechaActual
+                        })
+                    }
+
+                    setPantalla("Consultar");
+                })
+        }
     }
 
     const winCliente = () => {
@@ -225,6 +221,11 @@ function Recibocaja() {
             ...datos,
             cliente: document.getElementById('cliente').value
         })
+    }
+
+    const cambioPantallaCartera = (pantalla) => {
+        setPantalla(pantalla);
+        setCartera([]);
     }
 
     useEffect(() => {
@@ -262,10 +263,10 @@ function Recibocaja() {
                 <h1>{pantalla} Recibo de Caja</h1>
                 <form name="formul" className="row mt-3" onSubmit={enviarDatos}  >
                     {
-                        pantalla !== "Nuevo" ?
+                        pantalla !== "Nuevo" && pantalla !== "Buscar Cartera" ?
                             <div className="col-md-3 p-2">
                                 <label className="form-label"><b>Codigo</b></label>
-                                <input type='text' name="codigo" className="form-control" value={datos.codigo} onChange={handleInputChange} readOnly={bloquea} />
+                                <input type='text' name="codigo" className="form-control" value={datos.codigo} onChange={handleInputChange} readOnly={bloquea} autoComplete="off" />
                             </div>
                             : ""
                     }
@@ -292,7 +293,7 @@ function Recibocaja() {
                         </select>
                     </div>
                     {
-                        pantalla !== "Nuevo" ?
+                        pantalla !== "Nuevo" && pantalla !== "Buscar Cartera" ?
 
                             <div className="col-md-3 p-2">
                                 <label className="form-label"><b>Estado</b></label>
@@ -325,11 +326,11 @@ function Recibocaja() {
                                 <button className="btn btn-dark m-2" type="submit" name="pantalla" value="Buscar" onClick={cambiarPantalla} >Buscar</button>
                             </div>
 
-                            : pantalla === "Nuevo" ?
+                            : pantalla === "Nuevo" || pantalla === "Buscar Cartera" ?
                                 <div className="col-md-5 m-2">
                                     <button className="btn btn-dark m-2" type="button" name="pantalla" value="Consultar" onClick={cambiarPantalla} >Consultar</button>
                                     <button className="btn btn-dark m-2" type="button" name="pantalla" value="Limpiar" onClick={cambiarPantalla} >Limpiar</button>
-                                    <button className="btn btn-dark m-2" type="submit" name="pantalla" value="Guardar" onClick={cambiarPantalla} >Guardar</button>
+                                    <button className="btn btn-dark m-2" type="submit" name="pantalla" value="Buscar Cartera" onClick={cambiarPantalla} >Buscar Cartera</button>
                                 </div>
 
                                 :
@@ -343,7 +344,15 @@ function Recibocaja() {
             </div>
             <hr className="my-4" />
             <br />
-            {pantalla === "Buscar" ? <Detalle respuesta_json={detalle} editar={editar} pag={paginado} /> : ""}
+            {
+                pantalla === "Buscar" ? 
+                    <Detalle respuesta_json={detalle} anular={anular} pag={paginado} />
+                :
+                pantalla === "Buscar Cartera" ?
+                    <DetalleCartera respuesta_json={cartera} cambiarPantalla={cambioPantallaCartera} count={0} />
+                :
+                ""
+            }
         </div>
     )
 }
