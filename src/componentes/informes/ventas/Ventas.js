@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import Menu from '../menu/Menu';
+import React, { useEffect, useState } from 'react';
+import Menu from '../../menu/Menu';
 import Detalle from './Detalle';
-import './../../compartido/componentes/Estilo_principal.css';
+import './../../../compartido/componentes/Estilo_principal.css';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import Dominio from './../../dominio';
+import Dominio from './../../../dominio';
 
 const cookies = new Cookies();
 
-function InformeCartera() {
+function Ventas() {
 
     const fecha = new Date();
     const añoActual = fecha.getFullYear();
@@ -28,13 +28,13 @@ function InformeCartera() {
 
     const [pantalla, setPantalla] = useState('Consultar');
     const [detalle, setDetalle] = useState([]);
-    const UrlModulos = `${Dominio}/cartera/cartera`;
+    const [asesores, setAsesores] = useState([]);
+    const UrlModulos = `${Dominio}/informes/ventas/ventas`;
 
     const [datos, setDatos] = useState({
         cliente: '',
-        factura: '',
+        tipo: '',
         asesor: '',
-        estado: 'P',
         fecha1: fechaDesde,
         fecha2: fechaActual
     });
@@ -55,10 +55,9 @@ function InformeCartera() {
                 aut_ip: cookies.get('aut_ip'),
                 aut_bd: cookies.get('aut_bd'),
                 metodo: pantalla,
-                cxc_client: datos.cliente,
-                cxc_factur: datos.factura,
-                cxc_asesor: datos.factura,
-                cxc_estado: datos.estado,
+                cliente: datos.cliente,
+                tipo: datos.tipo,
+                asesor: datos.asesor,
                 fecha1: datos.fecha1,
                 fecha2: datos.fecha2,
                 limite: 'SI'
@@ -116,45 +115,34 @@ function InformeCartera() {
             }
 
         }
-
-
     }
 
-    const cerrar_cartera = async (codigo) => {
-        if (window.confirm("Desea cerrar la cartera " + codigo + " ?")) {
-            await axios.put(UrlModulos, {
+    useEffect(()=>{
+        const UrlAsesores = `${Dominio}/asesor/asesor`;
+
+        const obtenerAsesores = async () => {
+            
+            await axios.post(UrlAsesores, {
                 aut_ip: cookies.get('aut_ip'),
                 aut_bd: cookies.get('aut_bd'),
-                metodo: 'Cerrar',
-                cxc_id: codigo,
+                metodo: 'Buscar',
+                limite: 'NO'
             })
                 .then(response => {
-                    //console.log(response.data);
-                    const responseJSON = response.data;
-                    alert(responseJSON.mensaje);
-
-                    if (responseJSON) {
-                        setDatos({
-                            ...datos,
-                            cliente: '',
-                            factura: '',
-                            asesor: '',
-                            estado: 'P',
-                            fecha1: fechaDesde,
-                            fecha2: fechaActual
-                        })
-                    }
-
-                    setPantalla("Consultar");
+                    const respuesta = response.data;
+                    //console.log(respuesta);
+                    setAsesores(respuesta.result);
                 })
         }
-    }
+        obtenerAsesores();
+    },[]);
+
 
     return (
         <div className="container-completo">
             <Menu />
             <div className="container mt-3">
-                <h1>Informe de Cartera</h1>
+                <h1>Informe de Ventas</h1>
                 <form name="formul" className="row mt-3" onSubmit={enviarDatos}  >
                     <div className="col-md-3 p-2 logo-busqueda">
                         <label className="form-label"><b>Cliente</b></label>
@@ -162,21 +150,11 @@ function InformeCartera() {
                         <i className="fas fa-search" onClick={winCliente}></i>
                     </div>
                     <div className="col-md-3 p-2">
-                        <label className="form-label"><b>Factura</b></label>
-                        <input type='text' name="factura" className="form-control" value={datos.factura} onChange={handleInputChange} />
-                    </div>
-                    <div className="col-md-3 p-2">
-                        <label className="form-label"><b>Asesor</b></label>
-                        <input type='text' name="asesor" className="form-control" value={datos.asesor} onChange={handleInputChange} />
-                    </div>
-                    <div className="col-md-3 p-2">
-                        <label className="form-label"><b>Estado</b></label>
-                        <select name="estado" className="form-select" value={datos.estado} onChange={handleInputChange} >
+                        <label className="form-label"><b>Tipo</b></label>
+                        <select name="tipo" className="form-select" value={datos.tipo} onChange={handleInputChange} >
                             <option value="">Todos</option>
-                            <option value="P">Pendiente</option>
-                            <option value="C">Cancelada</option>
-                            <option value="A">Anulada</option>
-                            <option value="Z">Cerrada</option>
+                            <option value="F">Facturas</option>
+                            <option value="R">Remisiones</option>
                         </select>
                     </div>
                     <div className="col-md-3 p-2">
@@ -186,6 +164,19 @@ function InformeCartera() {
                     <div className="col-md-3 p-2">
                         <label className="form-label"><b>Hasta</b></label>
                         <input type="date" name="fecha2" className="form-control" value={datos.fecha2} onChange={handleInputChange}></input>
+                    </div>
+                    <div className="col-md-3 p-2">
+                        <label className="form-label"><b>Asesor</b></label>
+                        <select name="asesor" className="form-select" value={datos.asesor} onChange={handleInputChange} >
+                            <option value="">Todos</option>
+                            {
+                                !asesores ? "Cargando..."
+                                    :
+                                    asesores.map((asesor, index) => {
+                                        return <option key={index} value={asesor.ase_codigo}>{asesor.ase_codigo + '-' + asesor.ase_nombre}</option>
+                                    })
+                            }
+                        </select>
                     </div>
 
                     <hr className="my-4" />
@@ -209,9 +200,9 @@ function InformeCartera() {
             </div>
             <hr className="my-4" />
             <br />
-            {pantalla === "Buscar" ? <Detalle respuesta_json={detalle} cerrar_cartera={cerrar_cartera} pag={paginado} /> : ""}
+            {pantalla === "Buscar" ? <Detalle respuesta_json={detalle} pag={paginado} /> : ""}
         </div>
     )
 }
 
-export default InformeCartera;
+export default Ventas;
