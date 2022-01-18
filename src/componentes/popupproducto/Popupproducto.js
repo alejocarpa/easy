@@ -45,7 +45,8 @@ function Popupproducto() {
             pro_codigo: codigo,
             pro_nombre: nombre,
             pro_codbar: codigo_barras,
-            limite: 'SI'
+            limite: 'SI',
+            codigo_exacto: 'NO'
         })
             .then(response => {
 
