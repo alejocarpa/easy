@@ -25,8 +25,6 @@ function Movimiento_inventario() {
     const [datos, setDatos] = useState({
         codigo_del_producto: '',
         bodega: '',
-        fecha1: '',
-        fecha2: '',
         pro_codbar: ''
     });    
 
@@ -50,8 +48,6 @@ function Movimiento_inventario() {
                 metodo: pantalla,
                 pro_codbar: datos.pro_codbar,
                 bodega: datos.bodega,
-                fecha1: datos.fecha1,
-                fecha2: datos.fecha2,
                 limite: 'SI'
             })
                 .then(response => {
@@ -101,8 +97,6 @@ function Movimiento_inventario() {
                 ...datos,
                 codigo_del_producto: '',
                 bodega: '',
-                fecha1: '',
-                fecha2: '',
                 pro_codbar: ''
             })
 
@@ -162,14 +156,6 @@ function Movimiento_inventario() {
                                     })
                             }
                         </select>
-                    </div>
-                    <div className="col-md-3 p-2">
-                        <label className="form-label"><b>Fecha Desde</b></label>
-                        <input type="date" name="fecha1" className="form-control" value={datos.fecha1} onChange={handleInputChange}></input>
-                    </div>
-                    <div className="col-md-3 p-2">
-                        <label className="form-label"><b>Hasta</b></label>
-                        <input type="date" name="fecha2" className="form-control" value={datos.fecha2} onChange={handleInputChange}></input>
                     </div>
 
                     <hr className="my-4" />

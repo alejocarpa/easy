@@ -12,9 +12,9 @@ function Detalle(props) {
         setcarProducto(<VerDetalle show={false} />);
     }
     
-    const abrirModal = (producto,nombre) => {
+    const abrirModal = (producto,nombre,bodega,total_inventario) => {
         
-        setcarProducto(<VerDetalle show={true} handleClose={handleClose} codigo_producto={producto} nombre_producto={nombre} />);
+        setcarProducto(<VerDetalle show={true} handleClose={handleClose} codigo_producto={producto} nombre_producto={nombre} bodega={bodega} total_inventario={total_inventario} />);
 
     }
 
@@ -75,7 +75,7 @@ function Detalle(props) {
                                     <td className="text-center align-middle">{movimiento.tra_en}</td>
                                     <td className="text-center align-middle">{movimiento.fac}</td>
                                     <td className="text-center align-middle">{movimiento.total_inventario}</td>
-                                    <td className="align-middle"><Button variant="primary" onClick={()=>abrirModal(movimiento.codigo_producto,movimiento.produc)}>Ver Detalle</Button></td>
+                                    <td className="align-middle"><Button variant="primary" onClick={()=>abrirModal(movimiento.codigo_producto, movimiento.produc, movimiento.bod, movimiento.total_inventario)}>Ver Detalle</Button></td>
                                 </tr>
                             })
                         })}
