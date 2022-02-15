@@ -21,6 +21,8 @@ import InformeCartera from './componentes/informe_cartera/InformeCartera';
 import Ventas from './componentes/informes/ventas/Ventas';
 import Ventas_x_Producto from './componentes/informes/ventas_x_producto/Ventas_x_Producto';
 import Movimiento_inventario from './componentes/informes/movimiento_inventario/Movimiento_inventario';
+import Recepcion_tecnica from './componentes/informes/recepcion_tecnica/Recepcion_tecnica';
+import CambioClave from './componentes/cambio_clave/CambioClave';
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
           <Route path="/informes/ventas" component={Ventas} />
           <Route path="/informes/ventas_x_producto" component={Ventas_x_Producto} />
           <Route path="/informes/movimiento_inventario" component={Movimiento_inventario} />
+          <Route path="/informes/recepcion_tecnica" component={Recepcion_tecnica} />
+          <Route path="/cambio_clave" component={CambioClave} />
         </Switch>
       </BrowserRouter>
     </div>
