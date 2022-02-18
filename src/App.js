@@ -23,6 +23,7 @@ import Ventas_x_Producto from './componentes/informes/ventas_x_producto/Ventas_x
 import Movimiento_inventario from './componentes/informes/movimiento_inventario/Movimiento_inventario';
 import Recepcion_tecnica from './componentes/informes/recepcion_tecnica/Recepcion_tecnica';
 import CambioClave from './componentes/cambio_clave/CambioClave';
+import Personalizar from './componentes/personalizar/Personalizar';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="/informes/movimiento_inventario" component={Movimiento_inventario} />
           <Route path="/informes/recepcion_tecnica" component={Recepcion_tecnica} />
           <Route path="/cambio_clave" component={CambioClave} />
+          <Route path="/personalizar" component={Personalizar} />
         </Switch>
       </BrowserRouter>
     </div>

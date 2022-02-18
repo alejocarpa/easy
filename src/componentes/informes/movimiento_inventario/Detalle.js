@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import VerDetalle from './VerDetalle';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
+import Dominio from './../../../dominio';
+
+const cookies = new Cookies();
 
 function Detalle(props) {
     const resultado = props.respuesta_json;
     //console.log(resultado.result);
     const [anchoVentana, setAnchoVentana] = useState(window.innerWidth);
     const [carProducto, setcarProducto] = useState();
+    const [color_tabla, setColorTabla] = useState();
 
     const handleClose = () => {
         setcarProducto(<VerDetalle show={false} />);
@@ -17,6 +23,34 @@ function Detalle(props) {
         setcarProducto(<VerDetalle show={true} handleClose={handleClose} codigo_producto={producto} nombre_producto={nombre} bodega={bodega} total_inventario={total_inventario} />);
 
     }
+
+    useEffect(() => {
+        const UrlParametros = `${Dominio}/parametros/parametros`;
+
+        const obtenerColorTabla = async () => {
+            let tabla = '';
+            
+            await axios.post(UrlParametros, {
+                aut_ip: cookies.get('aut_ip'),
+                aut_bd: cookies.get('aut_bd'),
+                metodo: 'Buscar',
+                par_nombre: 'COLOR_TABLA'
+            })
+                .then(response => {
+                    //console.log(response.data);
+                    const responseJSON = response.data;
+
+                    if (responseJSON) {
+                        responseJSON.result.map((valor) => {
+                            tabla = valor.par_valor;
+                        })
+
+                        setColorTabla(tabla);
+                    }
+                })
+        }
+        obtenerColorTabla();
+    }, []);
 
     useEffect(() => {
         const handleResize = () => setAnchoVentana(window.innerWidth)
@@ -31,7 +65,7 @@ function Detalle(props) {
     return (
         <div>
             <h1>Resultado</h1>
-            <div className="detalle-exporta" >
+            <div className="detalle-exporta" style={color_tabla === "table table-dark" ? {background: '#212529'} : {background: '#D1E7DD'}}>
                 <div className="detalle-exporta-icono">
                     <a href={resultado.ruta_excel} className="detalle-exporta-icono">
                         <i className="fas fa-file-excel" />
@@ -45,7 +79,7 @@ function Detalle(props) {
             </div>
             {anchoVentana > 768 ?
 
-                <table className="table table-dark table-hover">
+                <table className={color_tabla}>
 
                     <thead>
                         <tr>
