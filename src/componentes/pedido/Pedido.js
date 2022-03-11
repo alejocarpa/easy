@@ -313,7 +313,7 @@ function Pedido() {
                     //console.log(responseJSON);
 
                     const top_4_productos_mes = responseJSON.top_4_productos_mes;
-                    setcarProducto(<CardProducto resultado={top_4_productos_mes} agregar={agregar} />);
+                    setcarProducto(<CardProducto resultado={top_4_productos_mes} unidad_de_medida={unidad_de_medida} agregar={agregar} />);
 
                 })
         }
@@ -618,7 +618,7 @@ function Pedido() {
                         pro_codbar: ''
                     })
                 } else {
-                    setcarProducto(<CardProducto resultado={responseJSON} agregar={agregar} />);
+                    setcarProducto(<CardProducto resultado={responseJSON} unidad_de_medida={unidad_de_medida} agregar={agregar} />);
                 }
 
             })
@@ -643,7 +643,7 @@ function Pedido() {
 
                 const responseJSON = response.data.result;
                 //console.log(responseJSON);
-                setcarProducto(<CardProducto resultado={responseJSON} agregar={agregar} />);
+                setcarProducto(<CardProducto resultado={responseJSON} unidad_de_medida={unidad_de_medida} agregar={agregar} />);
 
             })
     }
@@ -666,7 +666,7 @@ function Pedido() {
 
                 const responseJSON = response.data.result;
                 //console.log(responseJSON);
-                setcarProducto(<CardProducto resultado={responseJSON} agregar={agregar} />);
+                setcarProducto(<CardProducto resultado={responseJSON} unidad_de_medida={unidad_de_medida} agregar={agregar} />);
 
             })
     }

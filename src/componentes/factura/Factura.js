@@ -182,6 +182,18 @@ function Factura() {
         setPedidos([]);
     }
 
+    const winCliente = () => {
+        let miPopup = window.open('../popupcliente/', "popupId", "location=no,menubar=no,titlebar=no,resizable=no,toolbar=no, menubar=no,width=800,height=500,left=250,top=100");
+        miPopup.focus();
+    }
+
+    const codigoCliente = (e) => {
+        setDatos({
+            ...datos,
+            cliente: document.getElementById('cliente').value
+        })
+    }
+
     useEffect(() => {
         const UrlClientes = `${Dominio}/cliente/cliente`;
 
@@ -223,7 +235,7 @@ function Factura() {
             <Menu />
             <div className="container mt-3">
                 <h1>{pantalla === "Nuevo" ? "Nueva" : pantalla} Factura</h1>
-                <form className="row mt-3" onSubmit={enviarDatos}  >
+                <form name="formul" className="row mt-3" onSubmit={enviarDatos}  >
                     {
                         pantalla === "Nuevo" || pantalla === "Buscar Pedido" ?
                             <div className="col-md-3 p-2">
@@ -245,14 +257,10 @@ function Factura() {
 
                         ""
                     }
-                    <div className="col-md-3 p-2">
+                    <div className="col-md-3 p-2 logo-busqueda">
                         <label className="form-label"><b>Cliente</b></label>
-                        <input type='text' name="cliente" list="datalistOptions" className="form-control" value={datos.cliente} onChange={handleInputChange} onFocus={handleFocus} />
-                        <datalist id="datalistOptions">
-                            {!clientes ? "Cargando..." : clientes.map((cliente, index) => {
-                                return <option key={index} value={cliente.cli_codigo + '-' + cliente.cli_nombre1 + ' ' + cliente.cli_apelli1 + '-' + cliente.cli_docume}></option>
-                            })}
-                        </datalist>
+                        <input className="form-control" type="text" list="datalistOptions" name="cliente" id="cliente" value={datos.cliente} placeholder="Buscar..." onChange={handleInputChange} onFocus={() => { codigoCliente(); }} />
+                        <i className="fas fa-search" onClick={winCliente}></i>
                     </div>
                     {pantalla !== "Nuevo" && pantalla !== "Buscar Pedido" ?
 
